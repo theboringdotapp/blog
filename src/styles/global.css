@@ -98,10 +98,10 @@
   }
 
   article {
-    @apply prose prose-brand dark:prose-invert prose-img:mx-auto prose-img:my-auto max-w-full;
+    @apply prose prose-slate dark:prose-invert prose-img:mx-auto prose-img:my-auto max-w-full;
     @apply prose-headings:font-semibold prose-headings:tracking-tight;
-    @apply prose-headings:text-brand-900 dark:prose-headings:text-brand-100;
-    @apply prose-p:text-brand-600 dark:prose-p:text-brand-300;
+    @apply prose-headings:text-slate-900 dark:prose-headings:text-slate-100;
+    @apply prose-p:text-slate-600 dark:prose-p:text-slate-300;
     @apply prose-p:leading-relaxed;
   }
 }
@@ -266,4 +266,37 @@ pre {
   @apply ring-accent-blue/50 ring-2 ring-offset-2 outline-none;
   @apply dark:ring-offset-brand-900 ring-offset-white;
   @apply dark:ring-accent-purple/50;
+}
+
+/* Logo Easter Egg Animation */
+.logo-vibe-coded {
+}
+
+.logo-vibe-coded:hover {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+  background-image: linear-gradient(
+    90deg,
+    #ff00aa,
+    #ff0066,
+    #e100ff,
+    #7f00ff,
+    #00c3ff,
+    #00ffe1,
+    #ff00aa
+  );
+  background-size: 200% auto;
+  transition: all 0.7s ease;
+  animation: textGradientShift 3s linear infinite;
+  text-shadow: 0 0 5px rgba(255, 0, 170, 0.5);
+}
+
+@keyframes textGradientShift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
