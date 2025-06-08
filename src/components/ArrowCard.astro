@@ -12,31 +12,64 @@ const { entry } = Astro.props as {
 
 <a
   href={`/${entry.collection}/${entry.id}`}
-  class="not-prose group relative flex flex-nowrap rounded-lg border border-black/15 px-4 py-3 pr-10 transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+  class="not-prose group relative flex flex-nowrap rounded-xl p-6 
+         bg-white/60 dark:bg-brand-800/30
+         border border-brand-200/60 dark:border-brand-700/60
+         backdrop-blur-sm
+         transition-all duration-300 ease-out
+         hover:bg-white/80 dark:hover:bg-brand-800/50
+         hover:border-brand-300/60 dark:hover:border-brand-600/60
+         hover:shadow-lg hover:shadow-brand-200/20 dark:hover:shadow-brand-900/20
+         hover:scale-[1.02] hover:-translate-y-0.5
+         focus-visible:bg-white/80 dark:focus-visible:bg-brand-800/50
+         focus-visible:border-brand-300/60 dark:focus-visible:border-brand-600/60
+         transform-gpu"
 >
-  <div class="flex flex-1 flex-col truncate">
-    <div class="font-semibold">
+  <div class="flex flex-1 flex-col">
+    <div class="font-semibold text-brand-900 dark:text-brand-100 mb-2 leading-tight
+                group-hover:text-accent-blue dark:group-hover:text-accent-purple
+                transition-colors duration-300 ease-out">
       {entry.data.title}
     </div>
-    <div class="text-sm">
+    <div class="text-sm text-brand-600 dark:text-brand-300 leading-relaxed">
       {entry.data.description}
     </div>
   </div>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    class="absolute right-2 top-1/2 size-5 -translate-y-1/2 fill-none stroke-current stroke-2"
-  >
-    <line
-      x1="5"
-      y1="12"
-      x2="19"
-      y2="12"
-      class="translate-x-3 scale-x-0 transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-hover:scale-x-100 group-focus-visible:translate-x-0 group-focus-visible:scale-x-100"
-    ></line>
-    <polyline
-      points="12 5 19 12 12 19"
-      class="-translate-x-1 transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-focus-visible:translate-x-0"
-    ></polyline>
-  </svg>
+  
+  <!-- Simplified arrow icon -->
+  <div class="absolute right-6 top-1/2 -translate-y-1/2 
+              text-brand-400 dark:text-brand-500
+              group-hover:text-accent-blue dark:group-hover:text-accent-purple
+              transition-all duration-300 ease-out
+              group-hover:translate-x-1
+              transform-gpu">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      class="size-5 fill-none stroke-current stroke-2"
+    >
+      <line
+        x1="5"
+        y1="12"
+        x2="19"
+        y2="12"
+        class="translate-x-1 scale-x-75 opacity-70
+               transition-all duration-300 ease-out 
+               group-hover:translate-x-0 group-hover:scale-x-100 group-hover:opacity-100"
+      ></line>
+      <polyline
+        points="12 5 19 12 12 19"
+        class="transition-all duration-300 ease-out 
+               group-hover:translate-x-0.5"
+      ></polyline>
+    </svg>
+  </div>
+  
+  <!-- Subtle glow effect on hover -->
+  <div class="absolute inset-0 rounded-xl 
+              bg-gradient-to-r from-accent-blue/5 via-transparent to-accent-purple/5
+              dark:from-accent-purple/5 dark:via-transparent dark:to-accent-emerald/5
+              opacity-0 transition-opacity duration-300 ease-out
+              group-hover:opacity-100
+              pointer-events-none"></div>
 </a>
