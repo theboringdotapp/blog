@@ -1,9 +1,13 @@
 ---
 title: "Unsubscriber"
-description: "Clean up your inbox in minutes by easily identifying and removing unwanted subscriptions."
-date: "10/05/2024"
+description: "Clean your Gmail inbox with intelligent email unsubscription and batch processing."
+date: "04/22/2025"
 demoURL: "https://unsubscriber.theboring.app/"
 repoURL: "https://github.com/theboringdotapp/unsubscriber"
+ideaToDeploy: 6
+commits: 114
+tools: ["Cursor", "Vercel"]
+models: ["claude-3.7-sonnet", "gemini-2.5-pro" ]
 ---
 
 A simple Flask web application to help users easily find and unsubscribe from mailing lists in their Gmail account with just a few clicks.

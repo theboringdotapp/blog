@@ -1,9 +1,13 @@
 ---
 title: "Insights"
 description: "AI-powered GitHub activity analysis for developer growth and code review insights."
-date: "11/20/2024"
+date: "05/16/2025"
 demoURL: "https://insights.theboring.app/"
 repoURL: "https://github.com/theboringdotapp/dev-insights"
+ideaToDeploy: 30
+commits: 133
+tools: ["Cursor", "Vercel", "Claude Code CLI"]
+models: ["claude-3.7-sonnet", "gemini-2.5-pro" ]
 ---
 
 An intelligent GitHub activity analyzer that provides AI-powered insights on your pull requests and development patterns to help you grow as a developer.

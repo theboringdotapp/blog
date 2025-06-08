@@ -1,40 +1,31 @@
 ---
 title: "Where is Vini?"
-description: "Real-time flight tracking app with beautiful UI and privacy-first design."
-date: "12/15/2024"
+description: "Real-time tracking of my brother's travel adventures."
+date: "06/08/2025"
 demoURL: "https://whereisvini.theboring.app/"
+ideaToDeploy: 1
+commits: 24
+tools: ["Cursor", "v0", "Github Actions", "Vercel"]
+models: ["claude-4-sonnet", "ChatGPT (image generation)" ]
+summary: "My brother is constantly traveling and I never know where he is or when his next trip is. I made this tiny tool to keep track of his travels, based on his Flightradar24 profile."
 ---
 
-A real-time flight tracking application that shows where Vini is currently located with beautiful animations and privacy-focused design.
+My brother Vini travels constantly. I built this to track where he is in real-time.
 
-## ✨ Features
+### Features
 
-### 🛫 Real-time Flight Tracking
-- **Live Location**: See where Vini is right now with country flags and local time
-- **Next Adventure**: Real-time countdown to his next departure
-- **Flight Statistics**: Total flights, countries visited, and travel insights
-- **Privacy-First**: Only shows countries and airport codes - no sensitive flight details
+Shows his current location with country flags and local time. Displays a countdown to his next flight. Only shows countries and airport codes – no sensitive flight details.
 
-### 🎨 Beautiful UI/UX
-- **Animated Background**: Stunning gradient with floating orbs and sparkle effects
-- **Glassmorphism Design**: Modern cards with backdrop blur effects
-- **Mobile Optimized**: Responsive design that looks great on all devices
-- **Real-time Counters**: Live countdown timers to next departure
+The UI has animated backgrounds and glassmorphism cards that look clean on mobile and desktop.
 
-### 🔧 Technical Excellence
-- **Automated Data Collection**: GitHub Actions scrapes flight data every 12 hours
-- **Privacy-Focused API**: Sanitized endpoints that protect sensitive information
-- **SEO Optimized**: Complete meta tags, Open Graph, and structured data
-- **PWA Ready**: Installable web app with manifest and service worker support
+### How it works
 
-## 🚀 Tech Stack
+GitHub Actions scrapes flight data from Flightradar24 every 12 hours. The data gets sanitized before hitting the API – flight numbers and aircraft details are removed for privacy.
 
-Built with modern web technologies for optimal performance and user experience:
-- **Frontend**: React, TypeScript, Tailwind CSS
-- **Backend**: Node.js with automated data collection
-- **Deployment**: Vercel with GitHub Actions integration
-- **APIs**: Custom privacy-focused endpoints
+Everything updates in real-time: location, countdowns, and travel stats.
 
-## 🌟 Highlights
+### Tech
 
-This project demonstrates the perfect balance between functionality and privacy, showing how to build engaging real-time applications while respecting user data and maintaining beautiful, performant interfaces. 
+Next.js 15, React 19, TypeScript. Puppeteer handles scraping, GitHub Actions automates everything, deployed on Vercel.
+
+Built to show how you can make engaging real-time tracking while keeping privacy intact. 
