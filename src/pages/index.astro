@@ -158,7 +158,7 @@ const projects: CollectionEntry<"projects">[] = (
                           transition-all duration-300 ease-out">
                 <div class="status-dot size-2 rounded-full bg-amber-500 mt-2.5 pulse-glow"></div>
                 <div class="flex-1 space-y-1">
-                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Current working problem</p>
+                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Current technical challenge</p>
                   <p class="text-base font-medium text-slate-900 dark:text-slate-100">How to use parallel agentic coding with Linear</p>
                 </div>
               </div>
@@ -168,8 +168,8 @@ const projects: CollectionEntry<"projects">[] = (
                           transition-all duration-300 ease-out">
                 <div class="status-dot size-2 rounded-full bg-emerald-500 mt-2.5 pulse-glow"></div>
                 <div class="flex-1 space-y-1">
-                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Current project</p>
-                  <p class="text-base font-medium text-slate-900 dark:text-slate-100">Storytelling by music</p>
+                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Next app</p>
+                  <p class="text-base font-medium text-slate-900 dark:text-slate-100">An app to generate stories with music</p>
                 </div>
               </div>
             </div>
@@ -185,7 +185,7 @@ const projects: CollectionEntry<"projects">[] = (
           <div class="flex flex-wrap items-center justify-between gap-y-4">
             <div class="space-y-2">
               <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                Featured tools
+                My tiny apps
               </h2>
               <p class="text-slate-600 dark:text-slate-400">
                 AI-powered apps published so far
@@ -203,7 +203,7 @@ const projects: CollectionEntry<"projects">[] = (
                          hover:shadow-lg hover:shadow-purple-200/30 dark:hover:shadow-purple-900/30
                          transition-all duration-300 ease-out
                          backdrop-blur-sm transform-gpu hover:scale-105">
-                See all tools
+                See all apps
                 <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -222,46 +222,47 @@ const projects: CollectionEntry<"projects">[] = (
         </section>
 
         <!-- Latest Posts Section -->
-        <section class="animate space-y-8 fade-in-up">
-          <div class="flex flex-wrap items-center justify-between gap-y-4">
-            <div class="space-y-2">
-              <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                Latest posts
-              </h2>
-              <p class="text-slate-600 dark:text-slate-400">
-                Insights on building with AI
-              </p>
-            </div>
-            <Link href="/blog" underline={false}>
-              <div class="pill-button group inline-flex items-center gap-2 px-5 py-2.5
-                         bg-gradient-to-r from-white to-slate-50 dark:from-slate-700 dark:to-slate-800
-                         border border-slate-200 dark:border-slate-600
-                         rounded-full text-sm font-medium
-                         text-slate-700 dark:text-slate-100
-                         hover:from-emerald-50 hover:to-cyan-50 dark:hover:from-emerald-800/40 dark:hover:to-cyan-800/40
-                         hover:border-emerald-200 dark:hover:border-emerald-600
-                         hover:text-emerald-700 dark:hover:text-emerald-200
-                         hover:shadow-lg hover:shadow-emerald-200/30 dark:hover:shadow-emerald-900/30
-                         transition-all duration-300 ease-out
-                         backdrop-blur-sm transform-gpu hover:scale-105">
-                See all posts
-                <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
+        {blog.length > 0 && (
+          <section class="animate space-y-8 fade-in-up">
+            <div class="flex flex-wrap items-center justify-between gap-y-4">
+              <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                  Latest posts
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400">
+                  Insights on building with AI
+                </p>
               </div>
-            </Link>
-          </div>
-          <ul class="not-prose grid gap-6">
-            {
-              blog.map((post, index) => (
-                <li class="blog-card-wrapper" style={`animation-delay: ${(index + 1) * 100}ms`}>
-                  <ArrowCard entry={post} />
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-
+              <Link href="/blog" underline={false}>
+                <div class="pill-button group inline-flex items-center gap-2 px-5 py-2.5
+                           bg-gradient-to-r from-white to-slate-50 dark:from-slate-700 dark:to-slate-800
+                           border border-slate-200 dark:border-slate-600
+                           rounded-full text-sm font-medium
+                           text-slate-700 dark:text-slate-100
+                           hover:from-emerald-50 hover:to-cyan-50 dark:hover:from-emerald-800/40 dark:hover:to-cyan-800/40
+                           hover:border-emerald-200 dark:hover:border-emerald-600
+                           hover:text-emerald-700 dark:hover:text-emerald-200
+                           hover:shadow-lg hover:shadow-emerald-200/30 dark:hover:shadow-emerald-900/30
+                           transition-all duration-300 ease-out
+                           backdrop-blur-sm transform-gpu hover:scale-105">
+                  See all posts
+                  <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </Link>
+            </div>
+            <ul class="not-prose grid gap-6">
+              {
+                blog.map((post, index) => (
+                  <li class="blog-card-wrapper" style={`animation-delay: ${(index + 1) * 100}ms`}>
+                    <ArrowCard entry={post} />
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        )}
 
       </div>
     </aside>
