@@ -69,9 +69,7 @@
   body {
     @apply font-sans antialiased;
     @apply flex flex-col;
-    /* Modern gradient backgrounds */
-    @apply via-brand-50 to-brand-100 bg-gradient-to-br from-white;
-    @apply dark:from-brand-900 dark:via-brand-800 dark:to-brand-900 dark:bg-gradient-to-br;
+    @apply bg-white dark:bg-slate-900;
     @apply text-brand-700 dark:text-brand-200;
     @apply transition-colors duration-500 ease-in-out;
   }
@@ -148,6 +146,175 @@
 }
 .animate:nth-child(5) {
   transition-delay: 250ms;
+}
+
+/* New Product-like Animations */
+
+/* Slide up animation for hero */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.slide-up-delayed {
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  opacity: 0;
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+/* Floating orb animation */
+@keyframes floatingOrb {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -30px) scale(1.05);
+  }
+  50% {
+    transform: translate(-10px, 20px) scale(0.95);
+  }
+  75% {
+    transform: translate(30px, 10px) scale(1.02);
+  }
+}
+
+.floating-orb {
+  animation: floatingOrb 20s ease-in-out infinite;
+}
+
+.floating-orb-delayed {
+  animation: floatingOrb 25s ease-in-out 5s infinite;
+}
+
+/* Status dot pulse animation */
+@keyframes pulseAmber {
+  0% {
+    box-shadow: 0 0 0 0 rgb(245 158 11 / 0.8);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgb(245 158 11 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgb(245 158 11 / 0);
+  }
+}
+
+@keyframes pulseEmerald {
+  0% {
+    box-shadow: 0 0 0 0 rgb(16 185 129 / 0.8);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgb(16 185 129 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgb(16 185 129 / 0);
+  }
+}
+
+.pulse-glow {
+  position: relative;
+}
+
+.pulse-glow.bg-amber-500 {
+  animation: pulseAmber 2s ease-out infinite;
+}
+
+.pulse-glow.bg-emerald-500 {
+  animation: pulseEmerald 2s ease-out infinite;
+}
+
+/* Tech card animations */
+.tech-card {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.tech-card:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.tech-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+/* Focus item animations */
+.focus-item {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.focus-item:nth-child(1) {
+  animation-delay: 0.5s;
+}
+
+.focus-item:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+/* Enhanced card wrapper animations */
+.project-card-wrapper,
+.blog-card-wrapper {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+/* Pill button hover effect */
+.pill-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.pill-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.6s,
+    height 0.6s;
+}
+
+.pill-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Social button animations */
+.social-button {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
 }
 
 /* Floating animation for hero elements */

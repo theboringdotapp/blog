@@ -24,38 +24,164 @@ const projects: CollectionEntry<"projects">[] = (
   <Container>
     <aside data-pagefind-ignore>
       <!-- Hero Section -->
-      <div class="space-y-8 mb-20">
+      <div class="space-y-8 mb-24">
+
         <div class="space-y-6">
           <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight
                      text-slate-900 dark:text-slate-100 leading-tight">
-            <span class="block mb-2">Joyful little apps </span>
-            <span class="gradient-text block float">from a burnt-out dev</span>
+            <span class="block mb-2 slide-up">Joyful little apps </span>
+            <span class="gradient-text block  slide-up" style="animation-delay: 100ms">from a burnt-out dev</span>
           </h1>
           
           <div class="max-w-2xl space-y-6 text-lg leading-relaxed
                       text-slate-600 dark:text-slate-300">
-            <p class="animate">
+            <p class="animate fade-in-up">
               Hi, I'm a software developer. I'm using AI to create simple, joyful tools and micro-apps to bring a bit of spark back to life.
             </p>
-            <p class="animate">
+            <p class="animate fade-in-up" style="animation-delay: 100ms">
               All tools are designed to be easily published on the web and run on mostly free infrastructure.
             </p>
           </div>
         </div>
 
-        <div class="animate space-y-4 max-w-2xl">
+        <div class="animate space-y-6 max-w-2xl fade-in-up" style="animation-delay: 200ms">
           <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
             I share what I build, how I build it, and what I learn along the way. Feel free to reach out!
           </p>
-    
+          
+          <!-- Social Links -->
+          <div class="flex flex-wrap gap-3">
+            {
+              SOCIALS.map((social, index) => (
+                <Link href={social.HREF} external underline={false}>
+                  <div class="social-button group inline-flex items-center gap-2 px-4 py-2
+                             bg-white/60 dark:bg-slate-800/60
+                             border border-slate-200/60 dark:border-slate-600/40
+                             rounded-xl text-sm font-medium
+                             text-slate-700 dark:text-slate-200
+                             hover:bg-white/80 dark:hover:bg-slate-800/80
+                             hover:border-slate-300/60 dark:hover:border-slate-500/50
+                             hover:text-slate-900 dark:hover:text-slate-50
+                             hover:shadow-lg hover:shadow-slate-200/20 dark:hover:shadow-black/20
+                             transition-all duration-300 ease-out
+                             backdrop-blur-sm transform-gpu hover:scale-105"
+                       style={`animation-delay: ${300 + index * 50}ms`}>
+                    {social.NAME}
+                  </div>
+                </Link>
+              ))
+            }
+            <Link href={`mailto:${SITE.EMAIL}`} underline={false}>
+              <div class="social-button group inline-flex items-center gap-2 px-4 py-2
+                         bg-white/60 dark:bg-slate-800/60
+                         border border-slate-200/60 dark:border-slate-600/40
+                         rounded-xl text-sm font-medium
+                         text-slate-700 dark:text-slate-200
+                         hover:bg-white/80 dark:hover:bg-slate-800/80
+                         hover:border-slate-300/60 dark:hover:border-slate-500/50
+                         hover:text-slate-900 dark:hover:text-slate-50
+                         hover:shadow-lg hover:shadow-slate-200/20 dark:hover:shadow-black/20
+                         transition-all duration-300 ease-out
+                         backdrop-blur-sm transform-gpu hover:scale-105"
+                   style="animation-delay: 450ms">
+                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                {SITE.EMAIL}
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        <!-- Enhanced Stats Section -->
+        <div class="mt-16 space-y-8">
+          <!-- Tech Stack Cards -->
+          <div class="space-y-6">
+            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 opacity-90">
+              Current stack & focus
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- AI Tools Card -->
+              <div class="tech-card group relative p-5 rounded-xl border border-slate-200/60 dark:border-slate-700/40 
+                          bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm
+                          hover:border-purple-300/50 dark:hover:border-purple-700/50
+                          transition-all duration-500 ease-out hover:shadow-lg hover:shadow-purple-200/15 dark:hover:shadow-purple-900/15
+                          hover:-translate-y-0.5 transform-gpu">
+                <div class="relative space-y-3">
+                  <div class="flex items-center gap-3">
+                    <div class="size-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 p-1.5 rotate-1 group-hover:rotate-3 transition-transform duration-500">
+                      <svg class="size-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium text-slate-600 dark:text-slate-400">Favorite AI tools</h4>
+                      <p class="text-base font-semibold text-slate-900 dark:text-slate-100">
+                        Cursor, Claude Code CLI
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Models Card -->
+              <div class="tech-card group relative p-5 rounded-xl border border-slate-200/60 dark:border-slate-700/40 
+                          bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm
+                          hover:border-emerald-300/50 dark:hover:border-emerald-700/50
+                          transition-all duration-500 ease-out hover:shadow-lg hover:shadow-emerald-200/15 dark:hover:shadow-emerald-900/15
+                          hover:-translate-y-0.5 transform-gpu">
+                <div class="relative space-y-3">
+                  <div class="flex items-center gap-3">
+                    <div class="size-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 p-1.5 -rotate-1 group-hover:-rotate-3 transition-transform duration-500">
+                      <svg class="size-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium text-slate-600 dark:text-slate-400">Most used models</h4>
+                      <p class="text-base font-semibold text-slate-900 dark:text-slate-100">
+                        claude-3.5-sonnet, gemini-2.0-flash
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current Focus Section -->
+          <div class="space-y-4">
+            <div class="bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm rounded-xl border border-slate-200/50 dark:border-slate-700/40 p-6 space-y-4">
+              <div class="focus-item group flex items-start gap-4 p-3 rounded-lg 
+                          hover:bg-slate-50/50 dark:hover:bg-slate-800/30
+                          transition-all duration-300 ease-out">
+                <div class="status-dot size-2 rounded-full bg-amber-500 mt-2.5 pulse-glow"></div>
+                <div class="flex-1 space-y-1">
+                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Current working problem</p>
+                  <p class="text-base font-medium text-slate-900 dark:text-slate-100">How to use parallel agentic coding with Linear</p>
+                </div>
+              </div>
+              
+              <div class="focus-item group flex items-start gap-4 p-3 rounded-lg 
+                          hover:bg-slate-50/50 dark:hover:bg-slate-800/30
+                          transition-all duration-300 ease-out">
+                <div class="status-dot size-2 rounded-full bg-emerald-500 mt-2.5 pulse-glow"></div>
+                <div class="flex-1 space-y-1">
+                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Current project</p>
+                  <p class="text-base font-medium text-slate-900 dark:text-slate-100">Storytelling by music</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Content Sections -->
-      <div class="space-y-20">
+      <!-- Content Sections with enhanced cards -->
+      <div class="space-y-24">
 
         <!-- Featured Projects Section -->
-        <section class="animate space-y-8">
+        <section class="animate space-y-8 fade-in-up">
           <div class="flex flex-wrap items-center justify-between gap-y-4">
             <div class="space-y-2">
               <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
@@ -66,12 +192,19 @@ const projects: CollectionEntry<"projects">[] = (
               </p>
             </div>
             <Link href="/projects" underline={false}>
-              <div class="inline-flex items-center gap-2 px-4 py-2
-                         text-sm font-medium text-blue-600 dark:text-purple-400
-                         hover:text-blue-700 dark:hover:text-purple-300
-                         transition-colors duration-200 ease-out">
+              <div class="pill-button group inline-flex items-center gap-2 px-5 py-2.5
+                         bg-gradient-to-r from-white to-slate-50 dark:from-slate-700 dark:to-slate-800
+                         border border-slate-200 dark:border-slate-600
+                         rounded-full text-sm font-medium
+                         text-slate-700 dark:text-slate-100
+                         hover:from-purple-50 hover:to-blue-50 dark:hover:from-purple-800/40 dark:hover:to-blue-800/40
+                         hover:border-purple-200 dark:hover:border-purple-600
+                         hover:text-purple-700 dark:hover:text-purple-200
+                         hover:shadow-lg hover:shadow-purple-200/30 dark:hover:shadow-purple-900/30
+                         transition-all duration-300 ease-out
+                         backdrop-blur-sm transform-gpu hover:scale-105">
                 See all tools
-                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
               </div>
@@ -80,7 +213,7 @@ const projects: CollectionEntry<"projects">[] = (
           <ul class="not-prose grid gap-6">
             {
               projects.map((project, index) => (
-                <li class="animate" style={`animation-delay: ${(index + 1) * 50}ms`}>
+                <li class="project-card-wrapper" style={`animation-delay: ${(index + 1) * 100}ms`}>
                   <ArrowCard entry={project} />
                 </li>
               ))
@@ -89,7 +222,7 @@ const projects: CollectionEntry<"projects">[] = (
         </section>
 
         <!-- Latest Posts Section -->
-        <section class="animate space-y-8">
+        <section class="animate space-y-8 fade-in-up">
           <div class="flex flex-wrap items-center justify-between gap-y-4">
             <div class="space-y-2">
               <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
@@ -100,12 +233,19 @@ const projects: CollectionEntry<"projects">[] = (
               </p>
             </div>
             <Link href="/blog" underline={false}>
-              <div class="inline-flex items-center gap-2 px-4 py-2
-                         text-sm font-medium text-blue-600 dark:text-purple-400
-                         hover:text-blue-700 dark:hover:text-purple-300
-                         transition-colors duration-200 ease-out">
+              <div class="pill-button group inline-flex items-center gap-2 px-5 py-2.5
+                         bg-gradient-to-r from-white to-slate-50 dark:from-slate-700 dark:to-slate-800
+                         border border-slate-200 dark:border-slate-600
+                         rounded-full text-sm font-medium
+                         text-slate-700 dark:text-slate-100
+                         hover:from-emerald-50 hover:to-cyan-50 dark:hover:from-emerald-800/40 dark:hover:to-cyan-800/40
+                         hover:border-emerald-200 dark:hover:border-emerald-600
+                         hover:text-emerald-700 dark:hover:text-emerald-200
+                         hover:shadow-lg hover:shadow-emerald-200/30 dark:hover:shadow-emerald-900/30
+                         transition-all duration-300 ease-out
+                         backdrop-blur-sm transform-gpu hover:scale-105">
                 See all posts
-                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
               </div>
@@ -114,7 +254,7 @@ const projects: CollectionEntry<"projects">[] = (
           <ul class="not-prose grid gap-6">
             {
               blog.map((post, index) => (
-                <li class="animate" style={`animation-delay: ${(index + 1) * 50}ms`}>
+                <li class="blog-card-wrapper" style={`animation-delay: ${(index + 1) * 100}ms`}>
                   <ArrowCard entry={post} />
                 </li>
               ))
@@ -122,65 +262,35 @@ const projects: CollectionEntry<"projects">[] = (
           </ul>
         </section>
 
-        <!-- Connect Section -->
-        <section class="animate space-y-8">
-          <div class="space-y-2">
-            <h2 class="text-2xl font-bold text-brand-900 dark:text-brand-100 tracking-tight">
-              Let's Connect
-            </h2>
-            <p class="text-brand-600 dark:text-brand-400">
-              Get in touch and say hello
-            </p>
-          </div>
-          
-          <div class="space-y-6">
-            <p class="text-lg leading-relaxed text-brand-600 dark:text-brand-300 max-w-2xl">
-              If you want to get in touch with me about something or just to say
-              hi, reach out on social media or send me an email.
-            </p>
-            
-            <div class="flex flex-wrap gap-4">
-              {
-                SOCIALS.map((social) => (
-                  <Link href={social.HREF} external underline={false}>
-                    <div class="inline-flex items-center gap-2 px-4 py-2.5
-                               bg-white/80 dark:bg-slate-800/90
-                               border border-slate-200/80 dark:border-slate-600/50
-                               rounded-xl text-sm font-medium
-                               text-slate-700 dark:text-slate-200
-                               hover:bg-white/95 dark:hover:bg-slate-800/95
-                               hover:border-slate-300/80 dark:hover:border-slate-500/60
-                               hover:text-slate-900 dark:hover:text-slate-50
-                               hover:shadow-md hover:shadow-slate-200/30 dark:hover:shadow-black/30
-                               transition-all duration-300 ease-out
-                               backdrop-blur-sm">
-                      {social.NAME}
-                    </div>
-                  </Link>
-                ))
-              }
-              <Link href={`mailto:${SITE.EMAIL}`} underline={false}>
-                <div class="inline-flex items-center gap-2 px-4 py-2.5
-                           bg-white/80 dark:bg-slate-800/90
-                           border border-slate-200/80 dark:border-slate-600/50
-                           rounded-xl text-sm font-medium
-                           text-slate-700 dark:text-slate-200
-                           hover:bg-white/95 dark:hover:bg-slate-800/95
-                           hover:border-slate-300/80 dark:hover:border-slate-500/60
-                           hover:text-slate-900 dark:hover:text-slate-50
-                           hover:shadow-md hover:shadow-slate-200/30 dark:hover:shadow-black/30
-                           transition-all duration-300 ease-out
-                           backdrop-blur-sm">
-                  <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                  </svg>
-                  {SITE.EMAIL}
-                </div>
-              </Link>
-            </div>
-          </div>
-        </section>
+
       </div>
     </aside>
   </Container>
 </Layout>
+
+<script>
+  // Trigger animations when elements come into view
+  const animateElements = document.querySelectorAll('.animate, .tech-card, .focus-item, .project-card-wrapper, .blog-card-wrapper, .social-button');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+  
+  animateElements.forEach(el => {
+    observer.observe(el);
+  });
+  
+  // Clean up on page navigation
+  document.addEventListener('astro:before-swap', () => {
+    animateElements.forEach(el => {
+      observer.unobserve(el);
+    });
+  });
+</script>
