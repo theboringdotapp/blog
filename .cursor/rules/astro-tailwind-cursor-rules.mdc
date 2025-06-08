@@ -1,0 +1,125 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+You are an expert in JavaScript, TypeScript, and Astro framework for scalable web development.
+
+Key Principles
+- Write concise, technical responses with accurate Astro examples.
+- Leverage Astro's partial hydration and multi-framework support effectively.
+- Prioritize static generation and minimal JavaScript for optimal performance.
+- Use descriptive variable names and follow Astro's naming conventions.
+- Organize files using Astro's file-based routing system.
+
+Astro Project Structure (Astro Micro Specific)
+- Follow this project's established structure:
+  - src/
+    - components/    # Reusable UI components
+    - content/       # Content collections (blog/, projects/)
+    - layouts/       # Page layouts
+    - lib/           # Utility functions
+    - pages/         # File-based routing
+    - styles/        # Global styles
+  - public/          # Static assets
+  - astro.config.mjs # Main configuration
+
+Content Collections (Modern Astro 5+ Pattern)
+- Use content collections with glob loaders for content management
+- Blog posts in src/content/blog/ with frontmatter: title, description, date, draft, tags
+- Projects in src/content/projects/ with frontmatter: title, description, date, draft, demoURL, repoURL
+- Define collections in src/content.config.ts with Zod schemas
+- Use glob({ pattern: '**/*.{md,mdx}', base: "./src/content/[collection]" })
+
+Component Development
+- Create .astro files for Astro components
+- Use TypeScript throughout for type safety
+- Implement proper component composition and reusability
+- Use Astro's component props for data passing
+- Follow established component patterns (ArrowCard, Container, etc.)
+- Components should be accessible and semantic
+
+Routing and Pages
+- Utilize Astro's file-based routing system in src/pages/
+- Dynamic routes: [slug].astro or [...slug].astro
+- Collection-based routing for blog and projects
+- Implement proper 404 handling with 404.astro
+- Use getStaticPaths() for dynamic page generation
+
+Styling with TailwindCSS v4
+- This project uses TailwindCSS v4.1.6 with @tailwindcss/vite plugin (NOT @astrojs/tailwind)
+- Configuration in astro.config.mjs: vite: { plugins: [tailwindcss()] }
+- Use Tailwind utility classes extensively
+- Leverage responsive utilities (sm:, md:, lg:, xl:)
+- Support for system/light/dark themes via CSS variables
+- Use @tailwindcss/typography for prose content
+- Utility classes for spacing, colors, and layout
+- Never use @apply directive - prefer utility classes
+
+Typography and Fonts
+- Use @fontsource packages for fonts (geist-sans, geist-mono)
+- Import fonts in layouts or components as needed
+- Leverage TailwindCSS typography plugin for content formatting
+
+Performance Optimization
+- Minimize client-side JavaScript
+- Use client:* directives sparingly:
+  - client:load for critical interactivity
+  - client:idle for non-critical features
+  - client:visible for scroll-triggered components
+- Leverage Astro's static generation capabilities
+- Optimize images and assets
+
+Search and SEO
+- Integrate astro-pagefind for static search functionality
+- Use @astrojs/sitemap for automatic sitemap generation
+- Implement RSS feeds with @astrojs/rss
+- Comprehensive SEO with Head.astro component
+- Proper meta tags, Open Graph, and structured data
+
+Key Integrations in This Project
+- @astrojs/mdx for rich content authoring
+- @astrojs/sitemap for SEO
+- astro-pagefind for search functionality
+- Giscus for GitHub-based comments
+- Syntax highlighting with Shiki (theme: "css-variables")
+
+Content Management Best Practices
+- Use MDX for rich content with React-like components
+- Leverage frontmatter for metadata
+- Implement draft system for unpublished content
+- Use tags for content categorization
+- Date-based sorting and organization
+
+Project Configuration
+- Site configuration in src/consts.ts (SITE, HOME, BLOG, PROJECTS, SOCIALS)
+- Type definitions in src/types.ts
+- Content schemas in src/content.config.ts
+- Main config in astro.config.mjs
+
+Development Workflow
+- npm run dev for development server
+- npm run build for production build (includes astro check)
+- npm run preview for production preview
+- Use Prettier with Astro plugin for formatting
+
+Accessibility and Performance
+- Ensure semantic HTML structure
+- ARIA attributes where necessary
+- Keyboard navigation support
+- Core Web Vitals optimization
+- Zero frameworks by default (pure Astro)
+
+Key Conventions for This Project
+1. Use TypeScript throughout for type safety
+2. Follow established component naming and structure
+3. Maintain consistency with existing styling patterns
+4. Use content collections for all content management
+5. Implement proper error handling and fallbacks
+6. Follow established SEO and meta tag patterns
+
+Theme Customization
+- Modify src/consts.ts for site identity (title, description, social links)
+- Customize colors and themes via TailwindCSS variables
+- Component-based architecture for easy customization
+- Built-in dark/light/system theme support
