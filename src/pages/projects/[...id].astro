@@ -47,10 +47,12 @@ const { Content, headings } = await render(project);
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
               <div class="space-y-2">
-                <h3 class="font-semibold text-blue-900 dark:text-blue-100">Author's Summary</h3>
-                <p class="text-blue-800 dark:text-blue-200 leading-relaxed">
-                  {project.data.summary}
-                </p>
+                <h3 class="font-semibold text-blue-900 dark:text-blue-100">Why I made this</h3>
+                <div class="text-blue-800 dark:text-blue-200 leading-relaxed space-y-3">
+                  {project.data.summary.split('\n').map((line: string) => 
+                    line.trim() ? <p>{line}</p> : null
+                  ).filter(Boolean)}
+                </div>
               </div>
             </div>
           </div>
@@ -131,7 +133,7 @@ const { Content, headings } = await render(project);
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
-                <span class="font-medium">{project.data.ideaToDeploy} days to deploy</span>
+                <span class="font-medium">{project.data.ideaToDeploy} days to build</span>
               </div>
             )}
             
