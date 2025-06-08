@@ -27,85 +27,82 @@ const projects: CollectionEntry<"projects">[] = (
       <div class="space-y-8 mb-20">
         <div class="space-y-6">
           <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight
-                     text-brand-900 dark:text-brand-100 leading-tight">
-            <span class="block mb-2">Introducing</span>
-            <span class="gradient-text block float">Astro Micro 🔬</span>
+                     text-slate-900 dark:text-slate-100 leading-tight">
+            <span class="block mb-2">Joyful little apps </span>
+            <span class="gradient-text block float">from a burnt-out dev</span>
           </h1>
           
           <div class="max-w-2xl space-y-6 text-lg leading-relaxed
-                      text-brand-600 dark:text-brand-300">
+                      text-slate-600 dark:text-slate-300">
             <p class="animate">
-              Astro Micro is an accessible theme for <Link
-                href="https://astro.build/">Astro</Link
-              >. It's a fork of
-              <Link href="https://github.com/markhorn-dev">
-                Mark Horn's
-              </Link> popular theme <Link
-                href="https://astro.build/themes/details/astronano/"
-                >Astro Nano</Link
-              >. Like Nano, Micro comes with zero frameworks installed.
+              Hi, I'm a software developer. I'm using AI to create simple, joyful tools and micro-apps to bring a bit of spark back to life.
             </p>
             <p class="animate">
-              Micro adds features like <Link href="https://pagefind.app/"
-                >Pagefind</Link
-              > for search, <Link href="https://giscus.app">Giscus</Link> for comments,
-              and more. For a full list of changes, see this <Link
-                href="/blog/00-micro-changelog">blog post</Link
-              >.
+              All tools are designed to be easily published on the web and run on mostly free infrastructure.
             </p>
           </div>
         </div>
 
         <div class="animate space-y-4 max-w-2xl">
-          <p class="text-lg leading-relaxed text-brand-600 dark:text-brand-300">
-            Micro still comes with everything great about Nano — full type
-            safety, a sitemap, an RSS feed, and Markdown + MDX support.
-            Styled with TailwindCSS and preconfigured with system, light,
-            and dark themes.
+          <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+            I share what I build, how I build it, and what I learn along the way. Feel free to reach out!
           </p>
-          <div class="flex flex-wrap gap-4 pt-4">
-            <a 
-              href="https://github.com/trevortylerlee/astro-micro" 
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-6 py-3 
-                     bg-gradient-to-r from-accent-blue to-accent-purple
-                     dark:from-accent-purple dark:to-accent-emerald
-                     text-white font-semibold rounded-xl
-                     hover:shadow-lg hover:shadow-accent-blue/25
-                     dark:hover:shadow-accent-purple/25
-                     hover:scale-105 transition-all duration-300 ease-out
-                     transform-gpu no-underline
-                     focus-visible:outline-none focus-visible:ring-2 
-                     focus-visible:ring-accent-blue/50 focus-visible:ring-offset-2
-                     focus-visible:ring-offset-white dark:focus-visible:ring-offset-brand-900">
-              <svg class="size-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd" />
-              </svg>
-              View on GitHub
-            </a>
-          </div>
+    
         </div>
       </div>
 
       <!-- Content Sections -->
       <div class="space-y-20">
 
+        <!-- Featured Projects Section -->
+        <section class="animate space-y-8">
+          <div class="flex flex-wrap items-center justify-between gap-y-4">
+            <div class="space-y-2">
+              <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Featured tools
+              </h2>
+              <p class="text-slate-600 dark:text-slate-400">
+                AI-powered apps published so far
+              </p>
+            </div>
+            <Link href="/projects" underline={false}>
+              <div class="inline-flex items-center gap-2 px-4 py-2
+                         text-sm font-medium text-blue-600 dark:text-purple-400
+                         hover:text-blue-700 dark:hover:text-purple-300
+                         transition-colors duration-200 ease-out">
+                See all tools
+                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </Link>
+          </div>
+          <ul class="not-prose grid gap-6">
+            {
+              projects.map((project, index) => (
+                <li class="animate" style={`animation-delay: ${(index + 1) * 50}ms`}>
+                  <ArrowCard entry={project} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
         <!-- Latest Posts Section -->
         <section class="animate space-y-8">
           <div class="flex flex-wrap items-center justify-between gap-y-4">
             <div class="space-y-2">
-              <h2 class="text-2xl font-bold text-brand-900 dark:text-brand-100 tracking-tight">
+              <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                 Latest posts
               </h2>
-              <p class="text-brand-600 dark:text-brand-400">
-                Recent thoughts and tutorials
+              <p class="text-slate-600 dark:text-slate-400">
+                Insights on building with AI
               </p>
             </div>
             <Link href="/blog" underline={false}>
               <div class="inline-flex items-center gap-2 px-4 py-2
-                         text-sm font-medium text-accent-blue dark:text-accent-purple
-                         hover:text-accent-blue/80 dark:hover:text-accent-purple/80
+                         text-sm font-medium text-blue-600 dark:text-purple-400
+                         hover:text-blue-700 dark:hover:text-purple-300
                          transition-colors duration-200 ease-out">
                 See all posts
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,42 +114,8 @@ const projects: CollectionEntry<"projects">[] = (
           <ul class="not-prose grid gap-6">
             {
               blog.map((post, index) => (
-                <li class="animate" style={`animation-delay: ${(index + 1) * 100}ms`}>
+                <li class="animate" style={`animation-delay: ${(index + 1) * 50}ms`}>
                   <ArrowCard entry={post} />
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-
-        <!-- Recent Projects Section -->
-        <section class="animate space-y-8">
-          <div class="flex flex-wrap items-center justify-between gap-y-4">
-            <div class="space-y-2">
-              <h2 class="text-2xl font-bold text-brand-900 dark:text-brand-100 tracking-tight">
-                Recent projects
-              </h2>
-              <p class="text-brand-600 dark:text-brand-400">
-                Things I've been building
-              </p>
-            </div>
-            <Link href="/projects" underline={false}>
-              <div class="inline-flex items-center gap-2 px-4 py-2
-                         text-sm font-medium text-accent-blue dark:text-accent-purple
-                         hover:text-accent-blue/80 dark:hover:text-accent-purple/80
-                         transition-colors duration-200 ease-out">
-                See all projects
-                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-              </div>
-            </Link>
-          </div>
-          <ul class="not-prose grid gap-6">
-            {
-              projects.map((project, index) => (
-                <li class="animate" style={`animation-delay: ${(index + 1) * 100}ms`}>
-                  <ArrowCard entry={project} />
                 </li>
               ))
             }
