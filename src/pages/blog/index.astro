@@ -296,13 +296,18 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
 
 <script>
   // Tab switching functionality
-  document.addEventListener('DOMContentLoaded', () => {
+  function initTimeline() {
     console.log('Timeline script loaded'); // Debug log
     
     const tabs = document.querySelectorAll('.tab-btn');
     const views = document.querySelectorAll('.content-view');
     
     console.log('Found tabs:', tabs.length, 'views:', views.length); // Debug log
+    
+    if (tabs.length === 0 || views.length === 0) {
+      console.warn('No tabs or views found');
+      return;
+    }
     
     // Set initial active tab
     const allTab = document.getElementById('all-tab');
@@ -314,6 +319,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
     tabs.forEach(tab => {
       tab.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         const filter = tab.getAttribute('data-filter');
         console.log('Tab clicked:', filter); // Debug log
         
@@ -337,5 +343,9 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
         }
       });
     });
-  });
+  }
+  
+  // Initialize on both DOMContentLoaded and astro:page-load
+  document.addEventListener('DOMContentLoaded', initTimeline);
+  document.addEventListener('astro:page-load', initTimeline);
 </script>
