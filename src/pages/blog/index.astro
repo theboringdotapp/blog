@@ -11,6 +11,10 @@ const allBlog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
+const allProjects = (await getCollection("projects"))
+  .filter((project) => !project.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
 // Pre-render insights
 const insightEntries = allBlog.filter((entry) => entry.data.type === "insight");
 const insights = await Promise.all(
@@ -28,9 +32,13 @@ insights.forEach(({ insight, Content }) => {
   insightContentMap.set(insight.id, Content);
 });
 
-// Separate posts and insights for different display treatments
+// Combine all entries (blog posts, insights, and projects) and sort chronologically
+const allEntries = [...allBlog, ...allProjects]
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Separate content types for different display treatments
 const posts = blogPosts;
-const allEntries = allBlog; // All entries sorted chronologically
+const projects = allProjects;
 
 type Acc = {
   [year: string]: CollectionEntry<"blog">[];
@@ -86,69 +94,123 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
           >
             Insights
           </button>
+          <button 
+            id="projects-tab" 
+            class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+            data-filter="projects"
+          >
+            Projects
+          </button>
         </div>
 
         <!-- All Timeline View -->
         <div id="all-view" class="content-view space-y-0">
           <div class="relative">
             {allEntries.map((entry) => {
-              if (entry.data.type === "insight") {
+              // Check if this is a blog entry with type field
+              const isBlogEntry = 'type' in entry.data;
+              const entryType = isBlogEntry ? (entry.data as any).type : 'project';
+              
+              if (entryType === "insight") {
                 const Content = insightContentMap.get(entry.id);
                 return (
                   <article class="group relative">
                     <!-- Timeline line -->
-                    <div class="absolute left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
+                    <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
                     
                     <!-- Timeline dot -->
-                    <div class="absolute left-4 top-8 w-3 h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
+                    <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
                     
-                    <!-- Raw content -->
-                    <div class="pl-16 pb-12">
-                      <div class="space-y-3">
-                        <!-- Avatar + Content -->
-                        <div class="flex gap-3">
-                          <!-- Avatar -->
-                          <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                              A
-                            </div>
-                          </div>
-                          
-                          <div class="flex-1 space-y-2">
-                            <!-- Date aligned with text -->
-                            <div class="text-xs text-neutral-400 dark:text-neutral-500 font-mono">
-                              <FormattedDate date={entry.data.date} />
+                    <!-- Enhanced thought stream -->
+                    <div class="pl-8 sm:pl-16 pb-16">
+                      <!-- Premium Glass thought container -->
+                      <div class="relative overflow-hidden rounded-3xl 
+                                  bg-white/70 dark:bg-slate-900/70 
+                                  backdrop-blur-2xl backdrop-saturate-200
+                                  border-2 border-white/40 dark:border-slate-700/50
+                                  shadow-2xl shadow-slate-200/30 dark:shadow-black/40
+                                  hover:bg-white/85 dark:hover:bg-slate-800/85
+                                  hover:border-white/60 dark:hover:border-slate-600/60
+                                  hover:shadow-3xl hover:shadow-slate-300/40 dark:hover:shadow-black/60
+                                  transition-all duration-700 ease-out
+                                  hover:-translate-y-2 hover:scale-[1.02] transform-gpu
+                                  before:absolute before:inset-0 before:rounded-3xl
+                                  before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-slate-200/10
+                                  dark:before:from-slate-300/10 dark:before:to-slate-800/20
+                                  before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-700">
+                        
+                        <!-- Enhanced breathing space and natural flow -->
+                        <div class="relative p-8">
+                          <div class="space-y-4">
+                            <!-- Mobile-friendly header -->
+                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
+                              <!-- Timestamp with thought indicator -->
+                              <div class="flex items-center gap-2 text-sm font-medium text-slate-400 dark:text-slate-500 tracking-wide opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+                                <!-- Thought bubble icon -->
+                                <svg class="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors duration-500" 
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                                <FormattedDate date={entry.data.date} showTime={true} />
+                              </div>
+                              
+                              <!-- Mobile-friendly hashtags -->
+                              {isBlogEntry && 'tags' in entry.data && entry.data.tags && entry.data.tags.length > 0 && (
+                                <div class="opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+                                  <div class="flex flex-wrap gap-1.5 sm:gap-2 sm:justify-end">
+                                    {entry.data.tags.map((tag: string, tagIndex: number) => (
+                                      <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium
+                                                  bg-white/60 dark:bg-slate-800/60
+                                                  text-slate-500 dark:text-slate-400
+                                                  border border-slate-200/60 dark:border-slate-700/60
+                                                  rounded-full backdrop-blur-xl
+                                                  hover:bg-white/80 dark:hover:bg-slate-700/80
+                                                  hover:border-slate-300/60 dark:hover:border-slate-600/60
+                                                  hover:text-slate-600 dark:hover:text-slate-300
+                                                  transition-all duration-300 ease-out
+                                                  hover:scale-105 transform-gpu"
+                                            style={`transition-delay: ${tagIndex * 50}ms`}>
+                                        #{tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                             </div>
                             
-                            <!-- Full insight content -->
-                            <div class="prose prose-neutral dark:prose-invert prose-sm max-w-none text-neutral-800 dark:text-neutral-200 leading-relaxed">
+                            <!-- Natural thought typography with generous spacing -->
+                            <div class="prose prose-slate dark:prose-invert max-w-none 
+                                        text-slate-700 dark:text-slate-200 
+                                        [&>p]:leading-[1.8] [&>p]:text-base [&>p]:mb-6
+                                        [&>p:first-child]:mt-0 [&>p:last-child]:mb-0
+                                        [&>p]:transition-all [&>p]:duration-500
+                                        group-hover:[&>p]:text-slate-800 dark:group-hover:[&>p]:text-slate-100">
                               <Content />
                             </div>
-                            
-                            <!-- Tags - Hidden by default, show on hover -->
-                            {entry.data.tags && entry.data.tags.length > 0 && (
-                              <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                                <div class="flex flex-wrap gap-1">
-                                  {entry.data.tags.map((tag) => (
-                                    <span class="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded-full transition-all duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-700">
-                                      #{tag}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                       </div>
                     </div>
                   </article>
                 );
+              } else if (entryType === "project") {
+                // Project with special timeline treatment
+                return (
+                  <div class="relative pl-8 sm:pl-16 pb-8">
+                    <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
+                    <div class="space-y-3">
+                      <ArrowCard entry={entry} />
+                    </div>
+                  </div>
+                );
               } else {
                 // Full post with card and read more
                 return (
-                  <div class="relative pl-16 pb-8">
-                    <div class="absolute left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <div class="absolute left-4 top-8 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
+                  <div class="relative pl-8 sm:pl-16 pb-8">
+                    <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
                     <div class="space-y-3">
                       <ArrowCard entry={entry} />
                     </div>
@@ -189,52 +251,101 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
             {insights.map(({ insight, Content }) => (
               <article class="group relative">
                 <!-- Timeline line -->
-                <div class="absolute left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
+                <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
                 
                 <!-- Timeline dot -->
-                <div class="absolute left-4 top-8 w-3 h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
+                <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
                 
-                <!-- Raw content -->
-                <div class="pl-16 pb-12">
-                  <div class="space-y-3">
-                    <!-- Avatar + Content -->
-                    <div class="flex gap-3">
-                      <!-- Avatar -->
-                      <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                          A
-                        </div>
-                      </div>
-                      
-                      <div class="flex-1 space-y-2">
-                        <!-- Date aligned with text -->
-                        <div class="text-xs text-neutral-400 dark:text-neutral-500 font-mono">
-                          <FormattedDate date={insight.data.date} />
+                <!-- Enhanced thought stream -->
+                <div class="pl-8 sm:pl-16 pb-16">
+                  <!-- Premium Glass thought container -->
+                  <div class="relative overflow-hidden rounded-3xl 
+                              bg-white/70 dark:bg-slate-900/70 
+                              backdrop-blur-2xl backdrop-saturate-200
+                              border-2 border-white/40 dark:border-slate-700/50
+                              shadow-2xl shadow-slate-200/30 dark:shadow-black/40
+                              hover:bg-white/85 dark:hover:bg-slate-800/85
+                              hover:border-white/60 dark:hover:border-slate-600/60
+                              hover:shadow-3xl hover:shadow-slate-300/40 dark:hover:shadow-black/60
+                              transition-all duration-700 ease-out
+                              hover:-translate-y-2 hover:scale-[1.02] transform-gpu
+                              before:absolute before:inset-0 before:rounded-3xl
+                              before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-slate-200/10
+                              dark:before:from-slate-300/10 dark:before:to-slate-800/20
+                              before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-700">
+                    
+                    <!-- Enhanced breathing space and natural flow -->
+                    <div class="relative p-8">
+                      <div class="space-y-4">
+                        <!-- Mobile-friendly header -->
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
+                          <!-- Timestamp with thought indicator -->
+                          <div class="flex items-center gap-2 text-sm font-medium text-slate-400 dark:text-slate-500 tracking-wide opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+                            <!-- Thought bubble icon -->
+                            <svg class="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors duration-500" 
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <FormattedDate date={insight.data.date} showTime={true} />
+                          </div>
+                          
+                          <!-- Mobile-friendly hashtags -->
+                          {insight.data.tags && insight.data.tags.length > 0 && (
+                            <div class="opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+                              <div class="flex flex-wrap gap-1.5 sm:gap-2 sm:justify-end">
+                                {insight.data.tags.map((tag, tagIndex) => (
+                                  <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium
+                                              bg-white/60 dark:bg-slate-800/60
+                                              text-slate-500 dark:text-slate-400
+                                              border border-slate-200/60 dark:border-slate-700/60
+                                              rounded-full backdrop-blur-xl
+                                              hover:bg-white/80 dark:hover:bg-slate-700/80
+                                              hover:border-slate-300/60 dark:hover:border-slate-600/60
+                                              hover:text-slate-600 dark:hover:text-slate-300
+                                              transition-all duration-300 ease-out
+                                              hover:scale-105 transform-gpu"
+                                        style={`transition-delay: ${tagIndex * 50}ms`}>
+                                    #{tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                         
-                        <!-- Full insight content -->
-                        <div class="prose prose-neutral dark:prose-invert prose-sm max-w-none text-neutral-800 dark:text-neutral-200 leading-relaxed">
+                        <!-- Natural thought typography with generous spacing -->
+                        <div class="prose prose-slate dark:prose-invert max-w-none 
+                                    text-slate-700 dark:text-slate-200 
+                                    [&>p]:leading-[1.8] [&>p]:text-base [&>p]:mb-6
+                                    [&>p:first-child]:mt-0 [&>p:last-child]:mb-0
+                                    [&>p]:transition-all [&>p]:duration-500
+                                    group-hover:[&>p]:text-slate-800 dark:group-hover:[&>p]:text-slate-100">
                           <Content />
                         </div>
-                      
-                        <!-- Tags - Hidden by default, show on hover -->
-                        {insight.data.tags && insight.data.tags.length > 0 && (
-                          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                            <div class="flex flex-wrap gap-1">
-                              {insight.data.tags.map((tag) => (
-                                <span class="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded-full transition-all duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-700">
-                                  #{tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
                 </div>
               </article>
             ))}
+          </div>
+        </div>
+
+        <!-- Projects Only View -->
+        <div id="projects-view" class="content-view hidden space-y-10">
+          <div class="space-y-4">
+            {
+              projects.map((project) => (
+                <div class="relative pl-8 sm:pl-16 pb-8">
+                  <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                  <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
+                  <div class="space-y-3">
+                    <ArrowCard entry={project} />
+                  </div>
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -245,15 +356,25 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
 <script>
   // Tab switching functionality
   document.addEventListener('DOMContentLoaded', () => {
+    console.log('Timeline script loaded'); // Debug log
+    
     const tabs = document.querySelectorAll('.tab-btn');
     const views = document.querySelectorAll('.content-view');
     
+    console.log('Found tabs:', tabs.length, 'views:', views.length); // Debug log
+    
     // Set initial active tab
-    document.getElementById('all-tab')?.classList.add('border-neutral-800', 'dark:border-neutral-200', 'text-black', 'dark:text-white');
+    const allTab = document.getElementById('all-tab');
+    if (allTab) {
+      allTab.classList.add('border-neutral-800', 'dark:border-neutral-200', 'text-black', 'dark:text-white');
+      allTab.classList.remove('border-transparent');
+    }
     
     tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
         const filter = tab.getAttribute('data-filter');
+        console.log('Tab clicked:', filter); // Debug log
         
         // Update active tab
         tabs.forEach(t => {
@@ -264,8 +385,15 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
         tab.classList.remove('border-transparent');
         
         // Show/hide views
-        views.forEach(view => view.classList.add('hidden'));
-        document.getElementById(`${filter}-view`)?.classList.remove('hidden');
+        views.forEach(view => {
+          view.classList.add('hidden');
+        });
+        
+        const targetView = document.getElementById(`${filter}-view`);
+        console.log('Target view:', targetView); // Debug log
+        if (targetView) {
+          targetView.classList.remove('hidden');
+        }
       });
     });
   });

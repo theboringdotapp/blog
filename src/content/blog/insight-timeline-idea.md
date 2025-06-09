@@ -1,7 +1,7 @@
 ---
 title: "Experimenting with a timeline instead of a traditional blog"
 type: "insight"
-date: 2024-01-28
+date: 2025-06-09 13:00:00 -03:00
 tags: ["meta", "blogging", "design"]
 ---
 
