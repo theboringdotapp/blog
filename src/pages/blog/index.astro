@@ -1,19 +1,43 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/Container.astro";
 import ArrowCard from "@components/ArrowCard.astro";
+import Link from "@components/Link.astro";
+import FormattedDate from "@components/FormattedDate.astro";
 import { BLOG } from "@consts";
 
-const data = (await getCollection("blog"))
+const allBlog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Pre-render insights
+const insightEntries = allBlog.filter((entry) => entry.data.type === "insight");
+const insights = await Promise.all(
+  insightEntries.map(async (insight) => {
+    const { Content } = await render(insight);
+    return { insight, Content };
+  })
+);
+
+const blogPosts = allBlog.filter((entry) => entry.data.type === "post");
+
+// Create a map for quick lookup of rendered insights
+const insightContentMap = new Map();
+insights.forEach(({ insight, Content }) => {
+  insightContentMap.set(insight.id, Content);
+});
+
+// Separate posts and insights for different display treatments
+const posts = blogPosts;
+const allEntries = allBlog; // All entries sorted chronologically
 
 type Acc = {
   [year: string]: CollectionEntry<"blog">[];
 };
 
-const posts = data.reduce((acc: Acc, post) => {
+// Group posts by year for traditional blog view
+const postsByYear = posts.reduce((acc: Acc, post) => {
   const year = post.data.date.getFullYear().toString();
   if (!acc[year]) {
     acc[year] = [];
@@ -22,34 +46,227 @@ const posts = data.reduce((acc: Acc, post) => {
   return acc;
 }, {});
 
-const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
+const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a));
+
+// No pre-rendering needed for simple display
 ---
 
 <Layout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
   <Container>
     <aside data-pagefind-ignore>
-      <div class="space-y-10">
+      <div class="space-y-12">
+        <!-- Timeline Header -->
         <div class="space-y-4">
-          {
-            years.map((year) => (
-              <section class="animate space-y-4">
-                <div class="font-semibold text-black dark:text-white">
-                  {year}
+          <h1 class="text-3xl font-bold text-black dark:text-white">Timeline</h1>
+          <p class="text-neutral-600 dark:text-neutral-400">
+            My thoughts, learnings, and insights as I build projects. A mix of detailed posts and quick updates.
+          </p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 border-b border-neutral-200 dark:border-neutral-800">
+          <button 
+            id="all-tab" 
+            class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+            data-filter="all"
+          >
+            All
+          </button>
+          <button 
+            id="posts-tab" 
+            class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+            data-filter="posts"
+          >
+            Posts
+          </button>
+          <button 
+            id="insights-tab" 
+            class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+            data-filter="insights"
+          >
+            Insights
+          </button>
+        </div>
+
+        <!-- All Timeline View -->
+        <div id="all-view" class="content-view space-y-0">
+          <div class="relative">
+            {allEntries.map((entry) => {
+              if (entry.data.type === "insight") {
+                const Content = insightContentMap.get(entry.id);
+                return (
+                  <article class="group relative">
+                    <!-- Timeline line -->
+                    <div class="absolute left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
+                    
+                    <!-- Timeline dot -->
+                    <div class="absolute left-4 top-8 w-3 h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
+                    
+                    <!-- Raw content -->
+                    <div class="pl-16 pb-12">
+                      <div class="space-y-3">
+                        <!-- Avatar + Content -->
+                        <div class="flex gap-3">
+                          <!-- Avatar -->
+                          <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                              A
+                            </div>
+                          </div>
+                          
+                          <div class="flex-1 space-y-2">
+                            <!-- Date aligned with text -->
+                            <div class="text-xs text-neutral-400 dark:text-neutral-500 font-mono">
+                              <FormattedDate date={entry.data.date} />
+                            </div>
+                            
+                            <!-- Full insight content -->
+                            <div class="prose prose-neutral dark:prose-invert prose-sm max-w-none text-neutral-800 dark:text-neutral-200 leading-relaxed">
+                              <Content />
+                            </div>
+                            
+                            <!-- Tags - Hidden by default, show on hover -->
+                            {entry.data.tags && entry.data.tags.length > 0 && (
+                              <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out">
+                                <div class="flex flex-wrap gap-1">
+                                  {entry.data.tags.map((tag) => (
+                                    <span class="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded-full transition-all duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-700">
+                                      #{tag}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              } else {
+                // Full post with card and read more
+                return (
+                  <div class="relative pl-16 pb-8">
+                    <div class="absolute left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                    <div class="absolute left-4 top-8 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
+                    <div class="space-y-3">
+                      <ArrowCard entry={entry} />
+                    </div>
+                  </div>
+                );
+              }
+            })}
+          </div>
+        </div>
+
+        <!-- Posts Only View -->
+        <div id="posts-view" class="content-view hidden space-y-10">
+          <div class="space-y-4">
+            {
+              years.map((year) => (
+                <section class="animate space-y-4">
+                  <div class="font-semibold text-black dark:text-white">
+                    {year}
+                  </div>
+                  <div>
+                    <ul class="not-prose flex flex-col gap-4">
+                      {postsByYear[year].map((post) => (
+                        <li>
+                          <ArrowCard entry={post} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </section>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Insights Only View -->
+        <div id="insights-view" class="content-view hidden space-y-0">
+          <div class="relative">
+            {insights.map(({ insight, Content }) => (
+              <article class="group relative">
+                <!-- Timeline line -->
+                <div class="absolute left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
+                
+                <!-- Timeline dot -->
+                <div class="absolute left-4 top-8 w-3 h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
+                
+                <!-- Raw content -->
+                <div class="pl-16 pb-12">
+                  <div class="space-y-3">
+                    <!-- Avatar + Content -->
+                    <div class="flex gap-3">
+                      <!-- Avatar -->
+                      <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                          A
+                        </div>
+                      </div>
+                      
+                      <div class="flex-1 space-y-2">
+                        <!-- Date aligned with text -->
+                        <div class="text-xs text-neutral-400 dark:text-neutral-500 font-mono">
+                          <FormattedDate date={insight.data.date} />
+                        </div>
+                        
+                        <!-- Full insight content -->
+                        <div class="prose prose-neutral dark:prose-invert prose-sm max-w-none text-neutral-800 dark:text-neutral-200 leading-relaxed">
+                          <Content />
+                        </div>
+                      
+                        <!-- Tags - Hidden by default, show on hover -->
+                        {insight.data.tags && insight.data.tags.length > 0 && (
+                          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out">
+                            <div class="flex flex-wrap gap-1">
+                              {insight.data.tags.map((tag) => (
+                                <span class="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded-full transition-all duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-700">
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <ul class="not-prose flex flex-col gap-4">
-                    {posts[year].map((post) => (
-                      <li>
-                        <ArrowCard entry={post} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </section>
-            ))
-          }
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </aside>
   </Container>
 </Layout>
+
+<script>
+  // Tab switching functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const views = document.querySelectorAll('.content-view');
+    
+    // Set initial active tab
+    document.getElementById('all-tab')?.classList.add('border-neutral-800', 'dark:border-neutral-200', 'text-black', 'dark:text-white');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const filter = tab.getAttribute('data-filter');
+        
+        // Update active tab
+        tabs.forEach(t => {
+          t.classList.remove('border-neutral-800', 'dark:border-neutral-200', 'text-black', 'dark:text-white');
+          t.classList.add('border-transparent');
+        });
+        tab.classList.add('border-neutral-800', 'dark:border-neutral-200', 'text-black', 'dark:text-white');
+        tab.classList.remove('border-transparent');
+        
+        // Show/hide views
+        views.forEach(view => view.classList.add('hidden'));
+        document.getElementById(`${filter}-view`)?.classList.remove('hidden');
+      });
+    });
+  });
+</script>

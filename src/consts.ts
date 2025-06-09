@@ -16,8 +16,8 @@ export const HOME: Metadata = {
 };
 
 export const BLOG: Metadata = {
-  TITLE: "Blog",
-  DESCRIPTION: "Learnings about building projects with AI.",
+  TITLE: "Timeline",
+  DESCRIPTION: "My thoughts, learnings, and insights as I build projects.",
 };
 
 export const PROJECTS: Metadata = {

@@ -3,14 +3,31 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/Container.astro";
 import { SITE, HOME, SOCIALS } from "@consts";
 import ArrowCard from "@components/ArrowCard.astro";
+import FormattedDate from "@components/FormattedDate.astro";
 import Link from "@components/Link.astro";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
-const blog = (await getCollection("blog"))
+const allBlog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Separate posts and insights
+const blogPosts = allBlog
+  .filter((entry) => entry.data.type === "post")
+  .slice(0, 3); // Show latest 3 posts
+
+const insightEntries = allBlog
+  .filter((entry) => entry.data.type === "insight")
+  .slice(0, 4); // Show latest 4 insights
+
+// Pre-render insight content
+const insights = await Promise.all(
+  insightEntries.map(async (insight) => {
+    const { Content } = await render(insight);
+    return { insight, Content };
+  })
+);
 
 const projects: CollectionEntry<"projects">[] = (
   await getCollection("projects")
@@ -221,8 +238,87 @@ const projects: CollectionEntry<"projects">[] = (
           </ul>
         </section>
 
-        <!-- Latest Posts Section -->
-        {blog.length > 0 && (
+        <!-- Recent Insights Section -->
+        {insights.length > 0 && (
+          <section class="animate space-y-8 fade-in-up">
+            <div class="flex flex-wrap items-center justify-between gap-y-4">
+              <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                  Recent thoughts
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400">
+                  Quick insights and learnings as I build
+                </p>
+              </div>
+              <Link href="/blog" underline={false}>
+                <div class="pill-button group inline-flex items-center gap-2 px-5 py-2.5
+                           bg-gradient-to-r from-white to-slate-50 dark:from-slate-700 dark:to-slate-800
+                           border border-slate-200 dark:border-slate-600
+                           rounded-full text-sm font-medium
+                           text-slate-700 dark:text-slate-100
+                           hover:from-orange-50 hover:to-amber-50 dark:hover:from-orange-800/40 dark:hover:to-amber-800/40
+                           hover:border-orange-200 dark:hover:border-orange-600
+                           hover:text-orange-700 dark:hover:text-orange-200
+                           hover:shadow-lg hover:shadow-orange-200/30 dark:hover:shadow-orange-900/30
+                           transition-all duration-300 ease-out
+                           backdrop-blur-sm transform-gpu hover:scale-105">
+                  See timeline
+                  <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </Link>
+            </div>
+            
+            <!-- Raw insights display -->
+            <div class="space-y-6">
+              {insights.map(({ insight, Content }, index) => (
+                <div class="insight-wrapper border-l-2 border-neutral-200 dark:border-neutral-700 pl-6 py-3 group hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+                     style={`animation-delay: ${(index + 1) * 100}ms`}>
+                  <div class="space-y-3">
+                    <!-- Avatar + Content -->
+                    <div class="flex gap-3">
+                      <!-- Avatar -->
+                      <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                          A
+                        </div>
+                      </div>
+                      
+                      <div class="flex-1 space-y-2">
+                        <!-- Date aligned with text -->
+                        <div class="text-xs text-neutral-400 dark:text-neutral-500 font-mono">
+                          <FormattedDate date={insight.data.date} />
+                        </div>
+                        
+                        <!-- Full insight content -->
+                        <div class="prose prose-neutral dark:prose-invert prose-sm max-w-none text-neutral-800 dark:text-neutral-200 leading-relaxed">
+                          <Content />
+                        </div>
+                        
+                        <!-- Tags - Hidden by default, show on hover -->
+                        {insight.data.tags && insight.data.tags.length > 0 && (
+                          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out">
+                            <div class="flex flex-wrap gap-1">
+                              {insight.data.tags.map((tag) => (
+                                <span class="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded-full">
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- Latest Blog Posts Section -->
+        {blogPosts.length > 0 && (
           <section class="animate space-y-8 fade-in-up">
             <div class="flex flex-wrap items-center justify-between gap-y-4">
               <div class="space-y-2">
@@ -230,7 +326,7 @@ const projects: CollectionEntry<"projects">[] = (
                   Latest posts
                 </h2>
                 <p class="text-slate-600 dark:text-slate-400">
-                  Insights on building with AI
+                  In-depth articles and tutorials
                 </p>
               </div>
               <Link href="/blog" underline={false}>
@@ -254,7 +350,7 @@ const projects: CollectionEntry<"projects">[] = (
             </div>
             <ul class="not-prose grid gap-6">
               {
-                blog.map((post, index) => (
+                blogPosts.map((post, index) => (
                   <li class="blog-card-wrapper" style={`animation-delay: ${(index + 1) * 100}ms`}>
                     <ArrowCard entry={post} />
                   </li>
@@ -271,7 +367,7 @@ const projects: CollectionEntry<"projects">[] = (
 
 <script>
   // Trigger animations when elements come into view
-  const animateElements = document.querySelectorAll('.animate, .tech-card, .focus-item, .project-card-wrapper, .blog-card-wrapper, .social-button');
+  const animateElements = document.querySelectorAll('.animate, .tech-card, .focus-item, .project-card-wrapper, .blog-card-wrapper, .insight-wrapper, .social-button');
   
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
