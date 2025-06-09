@@ -1,0 +1,467 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import { getCollection } from "astro:content";
+
+// Get projects for the dropdown
+const projects = (await getCollection("projects"))
+  .filter((project) => !project.data.draft)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<Layout title="New Insight" description="Create a new insight">
+  <Container>
+    <div class="animate my-16 max-w-2xl mx-auto">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+          Create New Insight
+        </h1>
+        <p class="text-slate-600 dark:text-slate-400">
+          Quick tool to create new insights. Only works in development mode.
+        </p>
+      </div>
+
+      <form id="insight-form" class="space-y-6">
+        <!-- Title -->
+        <div>
+          <label for="title" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            required
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
+                   bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
+                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                   transition-all duration-200"
+            placeholder="AI is changing how I think about debugging"
+          />
+        </div>
+
+        <!-- Content -->
+        <div>
+          <label for="content" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Content
+          </label>
+          
+          <!-- Formatting Toolbar -->
+          <div class="mb-3 p-2 bg-slate-50 dark:bg-slate-700 rounded-t-xl border border-slate-200 dark:border-slate-600 border-b-0">
+            <div class="flex flex-wrap gap-1">
+              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="bold" title="Bold">
+                <strong>B</strong>
+              </button>
+              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="italic" title="Italic">
+                <em>I</em>
+              </button>
+              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="code" title="Code">
+                &lt;/&gt;
+              </button>
+              <div class="w-px h-6 bg-slate-300 dark:bg-slate-500 mx-1"></div>
+              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="link" title="Link">
+                🔗
+              </button>
+              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="list" title="List">
+                •
+              </button>
+              <div class="w-px h-6 bg-slate-300 dark:bg-slate-500 mx-1"></div>
+              <input type="file" id="image-upload" accept="image/*" class="hidden" />
+              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="image" title="Add Image">
+                🖼️
+              </button>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Editor -->
+            <div>
+              <textarea
+                id="content"
+                name="content"
+                required
+                rows="12"
+                class="w-full px-4 py-3 rounded-b-xl lg:rounded-xl border border-slate-200 dark:border-slate-600
+                       bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
+                       focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                       transition-all duration-200 resize-y font-mono text-sm"
+                placeholder="Write your insight here. You can use markdown syntax.
+
+**Bold text**
+*Italic text*
+`code`
+[Link text](url)
+- List item
+
+![Image alt text](/images/your-image.jpg)"
+              ></textarea>
+            </div>
+            
+            <!-- Preview -->
+            <div class="hidden lg:block">
+              <div class="h-full border border-slate-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800">
+                <div class="px-3 py-2 border-b border-slate-200 dark:border-slate-600 text-xs font-medium text-slate-500 dark:text-slate-400">
+                  Live Preview
+                </div>
+                <div id="preview" class="p-4 prose prose-sm dark:prose-invert max-w-none overflow-y-auto max-h-80">
+                  <em class="text-slate-400">Start typing to see preview...</em>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Instructions -->
+          <div class="mt-2 space-y-1 text-xs text-slate-500 dark:text-slate-400">
+            <div>
+              <strong>Images:</strong> Click 🖼️ to upload images. They'll be saved to <code>/public/images/</code> and the markdown will be generated automatically.
+            </div>
+            <div>
+              <strong>Shortcuts:</strong> 
+              <span class="inline-flex items-center gap-2 flex-wrap">
+                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+B</kbd> Bold
+                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+I</kbd> Italic
+                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+`</kbd> Code
+                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+K</kbd> Link
+                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+U</kbd> List
+                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+Shift+J</kbd> Image
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div>
+          <label for="tags" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Tags <span class="text-slate-500">(comma-separated)</span>
+          </label>
+          <input
+            type="text"
+            id="tags"
+            name="tags"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
+                   bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
+                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                   transition-all duration-200"
+            placeholder="ai, debugging, development"
+          />
+        </div>
+
+        <!-- Project Connection -->
+        <div>
+          <label for="project" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Connect to Project <span class="text-slate-500">(optional)</span>
+          </label>
+          <select
+            id="project"
+            name="project"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
+                   bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
+                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                   transition-all duration-200"
+          >
+            <option value="">No project connection</option>
+            {projects.map((project) => (
+              <option value={project.id}>{project.data.title}</option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600
+                 hover:from-blue-700 hover:to-purple-700
+                 text-white font-semibold rounded-xl
+                 hover:shadow-xl hover:shadow-blue-500/25
+                 hover:scale-[1.02] transition-all duration-300 ease-out
+                 transform-gpu focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Create Insight
+        </button>
+      </form>
+
+      <!-- Output Area -->
+      <div id="output" class="mt-8 hidden">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+          Generated Markdown
+        </h3>
+        <div class="relative">
+          <pre id="markdown-output" class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl text-sm overflow-x-auto
+                                          border border-slate-200 dark:border-slate-600"></pre>
+          <button
+            id="copy-button"
+            class="absolute top-2 right-2 px-3 py-1 text-xs bg-slate-200 dark:bg-slate-700
+                   text-slate-700 dark:text-slate-300 rounded-md hover:bg-slate-300 dark:hover:bg-slate-600
+                   transition-colors duration-200"
+          >
+            Copy
+          </button>
+        </div>
+        <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+          <p class="text-blue-800 dark:text-blue-200 text-sm">
+            <strong>Next steps:</strong>
+          </p>
+          <ol class="list-decimal list-inside text-blue-700 dark:text-blue-300 text-sm mt-2 space-y-1">
+            <li>Copy the markdown above</li>
+            <li id="filename-instruction">Create a new file: <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded"></code></li>
+            <li>Paste the content and save</li>
+            <li>The insight will appear on your site!</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Layout>
+
+
+
+<script>
+  // Simple markdown preview (basic implementation)
+  function simpleMarkdownToHtml(markdown: string): string {
+    return markdown
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/`(.*?)`/g, '<code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">$1</code>')
+      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 dark:text-blue-400 hover:underline">$1</a>')
+      .replace(/^- (.*)$/gm, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>)/s, '<ul class="list-disc list-inside">$1</ul>')
+      .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="max-w-full h-auto rounded" />')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/^(.+)$/, '<p>$1</p>')
+      .replace(/^<p><\/p>/, '');
+  }
+
+  // Live preview functionality
+  const contentTextarea = document.getElementById('content') as HTMLTextAreaElement;
+  const previewDiv = document.getElementById('preview');
+  
+  if (contentTextarea && previewDiv) {
+    contentTextarea.addEventListener('input', () => {
+      const markdown = contentTextarea.value;
+      if (markdown.trim()) {
+        previewDiv.innerHTML = simpleMarkdownToHtml(markdown);
+      } else {
+        previewDiv.innerHTML = '<em class="text-slate-400">Start typing to see preview...</em>';
+      }
+    });
+  }
+
+  // Format text function (shared between toolbar and keyboard shortcuts)
+  function formatText(action: string) {
+    const textarea = document.getElementById('content') as HTMLTextAreaElement;
+    
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    const beforeText = textarea.value.substring(0, start);
+    const afterText = textarea.value.substring(end);
+    
+    let newText = '';
+    let cursorOffset = 0;
+    
+    switch(action) {
+      case 'bold':
+        newText = `**${selectedText || 'bold text'}**`;
+        cursorOffset = selectedText ? 0 : -2;
+        break;
+      case 'italic':
+        newText = `*${selectedText || 'italic text'}*`;
+        cursorOffset = selectedText ? 0 : -1;
+        break;
+      case 'code':
+        newText = `\`${selectedText || 'code'}\``;
+        cursorOffset = selectedText ? 0 : -1;
+        break;
+      case 'link':
+        const url = selectedText.startsWith('http') ? selectedText : 'https://';
+        const linkText = selectedText.startsWith('http') ? 'Link text' : (selectedText || 'Link text');
+        newText = `[${linkText}](${url})`;
+        cursorOffset = 0;
+        break;
+      case 'list':
+        newText = selectedText ? selectedText.split('\n').map(line => `- ${line}`).join('\n') : '- List item';
+        cursorOffset = selectedText ? 0 : -9;
+        break;
+      case 'image':
+        document.getElementById('image-upload')?.click();
+        return;
+    }
+    
+    textarea.value = beforeText + newText + afterText;
+    textarea.focus();
+    
+    const newCursorPos = start + newText.length + cursorOffset;
+    textarea.setSelectionRange(newCursorPos, newCursorPos);
+    
+    // Trigger preview update
+    textarea.dispatchEvent(new Event('input'));
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    // Only trigger shortcuts when focused on the content textarea
+    const textarea = document.getElementById('content') as HTMLTextAreaElement;
+    if (document.activeElement !== textarea) return;
+    
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+    
+    if (!ctrlOrCmd) return;
+    
+    let action = '';
+    
+    switch(e.key.toLowerCase()) {
+      case 'b':
+        action = 'bold';
+        break;
+      case 'i':
+        action = 'italic';
+        break;
+      case '`':
+        action = 'code';
+        break;
+      case 'k':
+        action = 'link';
+        break;
+      case 'u':
+        action = 'list';
+        break;
+      case 'j':
+        if (e.shiftKey) action = 'image';
+        break;
+    }
+    
+    if (action) {
+      e.preventDefault();
+      formatText(action);
+    }
+  });
+
+  // Toolbar functionality
+  document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', function(this: HTMLButtonElement) {
+      const action = this.getAttribute('data-action');
+      if (action) {
+        formatText(action);
+      }
+    });
+  });
+
+  // Image upload handling
+  document.getElementById('image-upload')?.addEventListener('change', function(e) {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    
+    // Generate filename
+    const timestamp = Date.now();
+    const extension = file.name.split('.').pop();
+    const filename = `insight-${timestamp}.${extension}`;
+    
+    // Create markdown for the image
+    const imageMarkdown = `![${file.name}](/images/${filename})`;
+    
+    // Insert at cursor position
+    const textarea = document.getElementById('content') as HTMLTextAreaElement;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const beforeText = textarea.value.substring(0, start);
+    const afterText = textarea.value.substring(end);
+    
+    textarea.value = beforeText + imageMarkdown + afterText;
+    textarea.focus();
+    
+    const newCursorPos = start + imageMarkdown.length;
+    textarea.setSelectionRange(newCursorPos, newCursorPos);
+    
+    // Show instruction to user
+    alert(`Image reference added! 
+    
+Please manually save "${file.name}" as "/public/images/${filename}" 
+    
+The image will then display correctly in your insight.`);
+    
+    // Trigger preview update
+    textarea.dispatchEvent(new Event('input'));
+    
+    // Reset file input
+    (e.target as HTMLInputElement).value = '';
+  });
+
+  document.getElementById('insight-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
+    const tags = formData.get('tags') as string;
+    const project = formData.get('project') as string;
+    
+    // Generate filename from title
+    const filename = title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+    
+    const now = new Date();
+    const dateString = now.toISOString().split('T')[0];
+    
+    // Build frontmatter
+    let frontmatter = '---\n';
+    frontmatter += `title: "${title}"\n`;
+    frontmatter += `type: "insight"\n`;
+    frontmatter += `date: ${now.toISOString()}\n`;
+    
+    if (tags) {
+      const tagArray = tags.split(',').map(tag => `"${tag.trim()}"`).join(', ');
+      frontmatter += `tags: [${tagArray}]\n`;
+    }
+    
+    if (project) {
+      frontmatter += `projectId: "${project}"\n`;
+    }
+    
+    frontmatter += '---\n\n';
+    
+    const fullMarkdown = frontmatter + content;
+    
+    // Show output
+    const outputDiv = document.getElementById('output');
+    const markdownOutput = document.getElementById('markdown-output');
+    const filenameInstruction = document.getElementById('filename-instruction');
+    
+    if (outputDiv && markdownOutput && filenameInstruction) {
+      markdownOutput.textContent = fullMarkdown;
+      
+      const filenameCode = filenameInstruction.querySelector('code');
+      if (filenameCode) {
+        filenameCode.textContent = `src/content/blog/insight-${filename}.md`;
+      }
+      
+      outputDiv.classList.remove('hidden');
+      outputDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+  
+  // Copy functionality
+  document.getElementById('copy-button')?.addEventListener('click', function() {
+    const markdownOutput = document.getElementById('markdown-output');
+    if (markdownOutput) {
+      navigator.clipboard.writeText(markdownOutput.textContent || '').then(() => {
+        const button = this as HTMLButtonElement;
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('bg-green-200', 'dark:bg-green-700');
+        
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('bg-green-200', 'dark:bg-green-700');
+        }, 2000);
+      });
+    }
+  });
+</script> 
