@@ -80,13 +80,15 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
           >
             All
           </button>
-          <button 
-            id="posts-tab" 
-            class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
-            data-filter="posts"
-          >
-            Posts
-          </button>
+          {posts.length > 0 && (
+            <button 
+              id="posts-tab" 
+              class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+              data-filter="posts"
+            >
+              Posts
+            </button>
+          )}
           <button 
             id="insights-tab" 
             class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
@@ -183,7 +185,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                             </div>
                             
                             <!-- Thought content -->
-                            <div class="text-slate-700 dark:text-slate-200 leading-relaxed
+                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed
                                         group-hover:text-slate-800 dark:group-hover:text-slate-100
                                         transition-colors duration-300 ease-out">
                               <Content />
@@ -355,7 +357,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                         </div>
                         
                         <!-- Thought content -->
-                        <div class="text-slate-700 dark:text-slate-200 leading-relaxed
+                        <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed
                                     group-hover:text-slate-800 dark:group-hover:text-slate-100
                                     transition-colors duration-300 ease-out">
                           <Content />
