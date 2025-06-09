@@ -20,7 +20,7 @@ const blogPosts = allBlog
 
 const insightEntries = allBlog
   .filter((entry) => entry.data.type === "insight")
-  .slice(0, 4); // Show latest 4 insights
+  .slice(0, 5); // Show latest 5 insights
 
 const projects: CollectionEntry<"projects">[] = (
   await getCollection("projects")
@@ -255,7 +255,7 @@ const projects: CollectionEntry<"projects">[] = (
                            hover:shadow-lg hover:shadow-orange-200/30 dark:hover:shadow-orange-900/30
                            transition-all duration-300 ease-out
                            backdrop-blur-sm transform-gpu hover:scale-105">
-                  See timeline
+                  View more
                   <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                   </svg>
