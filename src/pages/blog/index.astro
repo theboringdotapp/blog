@@ -106,7 +106,11 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
         <!-- All Timeline View -->
         <div id="all-view" class="content-view space-y-0">
           <div class="relative">
-            {allEntries.map((entry) => {
+            <!-- Continuous timeline line -->
+            <div class="absolute left-[0.75rem] top-6 bottom-6 w-px bg-gradient-to-b from-slate-200 via-slate-300 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700"></div>
+            
+            <div class="space-y-8">
+            {allEntries.map((entry, index) => {
               // Check if this is a blog entry with type field
               const isBlogEntry = 'type' in entry.data;
               const entryType = isBlogEntry ? (entry.data as any).type : 'project';
@@ -114,15 +118,22 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
               if (entryType === "insight") {
                 const Content = insightContentMap.get(entry.id);
                 return (
-                  <article class="group relative">
-                    <!-- Timeline line -->
-                    <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
+                  <article class="group relative flex items-start gap-6">
+                    <!-- Timeline marker -->
+                    <div class="relative flex-shrink-0 mt-3">
+                      <div class="w-6 h-6 bg-white/90 dark:bg-slate-800/90 rounded-full border-2 border-slate-200 dark:border-slate-700 shadow-lg
+                                  backdrop-blur-sm flex items-center justify-center
+                                  group-hover:bg-white dark:group-hover:bg-slate-700
+                                  group-hover:scale-110 transition-all duration-300 ease-out">
+                        <svg class="w-3 h-3 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                      </div>
+                    </div>
                     
-                    <!-- Timeline dot -->
-                    <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
-                    
-                    <!-- Thought stream -->
-                    <div class="pl-8 sm:pl-16 pb-16">
+                    <!-- Thought content -->
+                    <div class="flex-1 min-w-0">
                       <!-- Thought card consistent with other cards -->
                       <div class="relative overflow-hidden rounded-2xl p-6
                                   bg-white/60 dark:bg-slate-800/60
@@ -147,17 +158,12 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                           <div class="space-y-3">
                             <!-- Thought header -->
                             <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
-                              <!-- Timestamp with thought indicator -->
-                              <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400
-                                          group-hover:text-slate-600 dark:group-hover:text-slate-300
-                                          transition-colors duration-300 ease-out">
-                                <!-- Thought bubble icon -->
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                                </svg>
-                                <FormattedDate date={entry.data.date} showTime={true} />
-                              </div>
+                                                        <!-- Timestamp -->
+                          <div class="text-xs text-slate-500 dark:text-slate-400
+                                      group-hover:text-slate-600 dark:group-hover:text-slate-300
+                                      transition-colors duration-300 ease-out">
+                            <FormattedDate date={entry.data.date} showTime={true} />
+                          </div>
                               
                               <!-- Hashtags -->
                               {isBlogEntry && 'tags' in entry.data && entry.data.tags && entry.data.tags.length > 0 && (
@@ -191,67 +197,115 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
               } else if (entryType === "project") {
                 // Project with special timeline treatment
                 return (
-                  <div class="relative pl-8 sm:pl-16 pb-8">
-                    <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
-                    <div class="space-y-3">
+                  <article class="group relative flex items-start gap-6">
+                    <!-- Timeline marker -->
+                    <div class="relative flex-shrink-0 mt-3">
+                      <div class="w-3 h-3 ml-1.5 bg-emerald-500 dark:bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900 shadow-lg
+                                  group-hover:bg-emerald-400 dark:group-hover:bg-emerald-300 
+                                  group-hover:scale-125 transition-all duration-300 ease-out
+                                  ring-2 ring-emerald-200 dark:ring-emerald-800"></div>
+                    </div>
+                    
+                    <!-- Project content -->
+                    <div class="flex-1 min-w-0">
                       <ArrowCard entry={entry} />
                     </div>
-                  </div>
+                  </article>
                 );
               } else {
                 // Full post with card and read more
                 return (
-                  <div class="relative pl-8 sm:pl-16 pb-8">
-                    <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                    <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
-                    <div class="space-y-3">
+                  <article class="group relative flex items-start gap-6">
+                    <!-- Timeline marker -->
+                    <div class="relative flex-shrink-0 mt-3">
+                      <div class="w-3 h-3 ml-1.5 bg-blue-500 dark:bg-blue-400 rounded-full border-2 border-white dark:border-slate-900 shadow-lg
+                                  group-hover:bg-blue-400 dark:group-hover:bg-blue-300 
+                                  group-hover:scale-125 transition-all duration-300 ease-out
+                                  ring-2 ring-blue-200 dark:ring-blue-800"></div>
+                    </div>
+                    
+                    <!-- Post content -->
+                    <div class="flex-1 min-w-0">
                       <ArrowCard entry={entry} />
                     </div>
-                  </div>
+                  </article>
                 );
               }
             })}
+            </div>
           </div>
         </div>
 
         <!-- Posts Only View -->
-        <div id="posts-view" class="content-view hidden space-y-10">
-          <div class="space-y-4">
+        <div id="posts-view" class="content-view hidden space-y-0">
+          <div class="relative">
+            <!-- Continuous timeline line -->
+            <div class="absolute left-[1.125rem] top-6 bottom-6 w-px bg-gradient-to-b from-slate-200 via-slate-300 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700"></div>
+            
+            <div class="space-y-12">
             {
               years.map((year) => (
-                <section class="animate space-y-4">
-                  <div class="font-semibold text-black dark:text-white">
-                    {year}
-                  </div>
-                  <div>
-                    <ul class="not-prose flex flex-col gap-4">
-                      {postsByYear[year].map((post) => (
-                        <li>
+                <section class="animate space-y-6">
+                  <!-- Year marker -->
+                 {/*  <div class="flex items-center gap-4">
+                    <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full border-2 border-white dark:border-slate-900 shadow-lg flex items-center justify-center">
+                      <div class="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                    <div class="font-bold text-xl text-slate-900 dark:text-slate-100">
+                      {year}
+                    </div>
+                  </div> */}
+                  
+                  <!-- Posts for this year -->
+                  <div class="ml-10 space-y-8">
+                    {postsByYear[year].map((post) => (
+                      <article class="group relative flex items-start gap-6">
+                        <!-- Timeline marker -->
+                        <div class="relative flex-shrink-0 mt-3 -ml-[2.75rem]">
+                          <div class="w-3 h-3 ml-3.75 bg-blue-500 dark:bg-blue-400 rounded-full border-2 border-white dark:border-slate-900 shadow-lg
+                                      group-hover:bg-blue-400 dark:group-hover:bg-blue-300 
+                                      group-hover:scale-125 transition-all duration-300 ease-out
+                                      ring-2 ring-blue-200 dark:ring-blue-800"></div>
+                        </div>
+                        
+                        <!-- Post content -->
+                        <div class="flex-1 min-w-0">
                           <ArrowCard entry={post} />
-                        </li>
-                      ))}
-                    </ul>
+                        </div>
+                      </article>
+                    ))}
                   </div>
                 </section>
-              ))
-            }
+                              ))
+              }
+            </div>
           </div>
         </div>
 
         <!-- Insights Only View -->
         <div id="insights-view" class="content-view hidden space-y-0">
           <div class="relative">
+            <!-- Continuous timeline line -->
+            <div class="absolute left-[1.125rem] top-6 bottom-6 w-px bg-gradient-to-b from-slate-200 via-slate-300 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700"></div>
+            
+            <div class="space-y-8">
             {insights.map(({ insight, Content }) => (
-              <article class="group relative">
-                <!-- Timeline line -->
-                <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800 group-last:hidden"></div>
+              <article class="group relative flex items-start gap-6">
+                <!-- Timeline marker -->
+                <div class="relative flex-shrink-0 mt-3 ml-1.5">
+                  <div class="w-6 h-6 bg-white/90 dark:bg-slate-800/90 rounded-full border-2 border-slate-200 dark:border-slate-700 shadow-lg
+                              backdrop-blur-sm flex items-center justify-center
+                              group-hover:bg-white dark:group-hover:bg-slate-700
+                              group-hover:scale-110 transition-all duration-300 ease-out">
+                    <svg class="w-3 h-3 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                  </div>
+                </div>
                 
-                <!-- Timeline dot -->
-                <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-neutral-300 dark:bg-neutral-700 rounded-full border-2 border-white dark:border-neutral-950 transition-colors group-hover:bg-neutral-600 dark:group-hover:bg-neutral-400"></div>
-                
-                <!-- Thought stream -->
-                <div class="pl-8 sm:pl-16 pb-16">
+                <!-- Thought content -->
+                <div class="flex-1 min-w-0">
                   <!-- Thought card consistent with other cards -->
                   <div class="relative overflow-hidden rounded-2xl p-6
                               bg-white/60 dark:bg-slate-800/60
@@ -276,15 +330,10 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                       <div class="space-y-3">
                         <!-- Thought header -->
                         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
-                          <!-- Timestamp with thought indicator -->
-                          <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400
+                          <!-- Timestamp -->
+                          <div class="text-xs text-slate-500 dark:text-slate-400
                                       group-hover:text-slate-600 dark:group-hover:text-slate-300
                                       transition-colors duration-300 ease-out">
-                            <!-- Thought bubble icon -->
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                            </svg>
                             <FormattedDate date={insight.data.date} showTime={true} />
                           </div>
                           
@@ -317,23 +366,36 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                 </div>
               </article>
             ))}
+            </div>
           </div>
         </div>
 
         <!-- Projects Only View -->
-        <div id="projects-view" class="content-view hidden space-y-10">
-          <div class="space-y-4">
+        <div id="projects-view" class="content-view hidden space-y-0">
+          <div class="relative">
+            <!-- Continuous timeline line -->
+            <div class="absolute left-[1.125rem] top-6 bottom-6 w-px bg-gradient-to-b from-slate-200 via-slate-300 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700"></div>
+            
+            <div class="space-y-8">
             {
               projects.map((project) => (
-                <div class="relative pl-8 sm:pl-16 pb-8">
-                  <div class="absolute left-3 sm:left-6 top-12 bottom-0 w-px bg-neutral-200 dark:bg-neutral-800"></div>
-                  <div class="absolute left-2 sm:left-4 top-8 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white dark:border-neutral-950"></div>
-                  <div class="space-y-3">
+                <article class="group relative flex items-start gap-6">
+                  <!-- Timeline marker -->
+                  <div class="relative flex-shrink-0 mt-3">
+                    <div class="w-3 h-3 ml-3 bg-emerald-500 dark:bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900 shadow-lg
+                                group-hover:bg-emerald-400 dark:group-hover:bg-emerald-300 
+                                group-hover:scale-125 transition-all duration-300 ease-out
+                                ring-2 ring-emerald-200 dark:ring-emerald-800"></div>
+                  </div>
+                  
+                  <!-- Project content -->
+                  <div class="flex-1 min-w-0">
                     <ArrowCard entry={project} />
                   </div>
-                </div>
+                </article>
               ))
             }
+            </div>
           </div>
         </div>
       </div>
