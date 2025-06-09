@@ -1,0 +1,104 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+import { getProjectById } from "@lib/utils";
+import { render } from "astro:content";
+
+interface Props {
+  insight: CollectionEntry<"blog">;
+  showProjectChip?: boolean;
+}
+
+const { insight, showProjectChip = false } = Astro.props;
+
+// Get project details if projectId exists and we want to show the chip
+const project = showProjectChip && insight.data.projectId 
+  ? await getProjectById(insight.data.projectId) 
+  : null;
+
+// Render the insight content
+const { Content } = await render(insight);
+---
+
+<div class="thought-bubble group relative">
+  <!-- Thought card consistent with existing design -->
+  <div class="relative overflow-hidden rounded-2xl p-6
+              bg-white/60 dark:bg-slate-800/60
+              border border-slate-200/60 dark:border-slate-700/40
+              backdrop-blur-md
+              transition-all duration-500 ease-out
+              hover:bg-white/80 dark:hover:bg-slate-800/80
+              hover:border-slate-300/80 dark:hover:border-slate-600/60
+              hover:shadow-2xl hover:shadow-slate-200/40 dark:hover:shadow-black/40
+              hover:scale-[1.01] hover:-translate-y-1
+              transform-gpu">
+    
+    <!-- Background gradient animation -->
+    <div class="absolute inset-0 bg-gradient-to-br 
+                from-transparent via-transparent to-transparent
+                group-hover:from-purple-100/20 group-hover:via-transparent group-hover:to-blue-100/20
+                dark:group-hover:from-purple-900/10 dark:group-hover:via-transparent dark:group-hover:to-blue-900/10
+                transition-all duration-700 ease-out"></div>
+    
+    <!-- Thought content -->
+    <div class="relative">
+      <div class="space-y-3">
+        <!-- Thought header -->
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
+          <!-- Timestamp and Project Chip -->
+          <div class="flex items-center gap-3">
+            <div class="text-xs text-slate-500 dark:text-slate-400
+                        group-hover:text-slate-600 dark:group-hover:text-slate-300
+                        transition-colors duration-300 ease-out">
+              <FormattedDate date={insight.data.date} showTime={true} />
+            </div>
+            
+            <!-- Project Chip -->
+            {project && (
+              <a 
+                href={`/projects/${project.id}`}
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
+                       bg-gradient-to-r from-blue-50 to-purple-50 
+                       dark:from-blue-900/30 dark:to-purple-900/30
+                       border border-blue-200/50 dark:border-purple-700/30
+                       text-blue-700 dark:text-blue-300
+                       hover:from-blue-100 hover:to-purple-100
+                       dark:hover:from-blue-900/50 dark:hover:to-purple-900/50
+                       hover:border-blue-300 dark:hover:border-purple-600
+                       transition-all duration-200 no-underline">
+                <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+                {project.data.title}
+              </a>
+            )}
+          </div>
+          
+          <!-- Hashtags -->
+          {insight.data.tags && insight.data.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {insight.data.tags.slice(0, 3).map((tag) => (
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs
+                            bg-slate-100 dark:bg-slate-700
+                            text-slate-600 dark:text-slate-300
+                            group-hover:bg-gradient-to-r group-hover:from-purple-100 group-hover:to-blue-100
+                            dark:group-hover:from-purple-900/30 dark:group-hover:to-blue-900/30
+                            transition-all duration-300 ease-out">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <!-- Thought content -->
+        <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed
+                    group-hover:text-slate-800 dark:group-hover:text-slate-100
+                    transition-colors duration-300 ease-out
+                    [&>p]:mb-4 [&>p:last-child]:mb-0">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

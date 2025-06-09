@@ -5,6 +5,7 @@ import Container from "@components/Container.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import FormattedDate from "@components/FormattedDate.astro";
+import InsightDisplay from "@components/InsightDisplay.astro";
 import { BLOG } from "@consts";
 
 const allBlog = (await getCollection("blog"))
@@ -136,63 +137,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                     
                     <!-- Thought content -->
                     <div class="flex-1 min-w-0">
-                      <!-- Thought card consistent with other cards -->
-                      <div class="relative overflow-hidden rounded-2xl p-6
-                                  bg-white/60 dark:bg-slate-800/60
-                                  border border-slate-200/60 dark:border-slate-700/40
-                                  backdrop-blur-md
-                                  transition-all duration-500 ease-out
-                                  hover:bg-white/80 dark:hover:bg-slate-800/80
-                                  hover:border-slate-300/80 dark:hover:border-slate-600/60
-                                  hover:shadow-2xl hover:shadow-slate-200/40 dark:hover:shadow-black/40
-                                  hover:scale-[1.01] hover:-translate-y-1
-                                  transform-gpu">
-                        
-                        <!-- Background gradient animation -->
-                        <div class="absolute inset-0 bg-gradient-to-br 
-                                    from-transparent via-transparent to-transparent
-                                    group-hover:from-purple-100/20 group-hover:via-transparent group-hover:to-blue-100/20
-                                    dark:group-hover:from-purple-900/10 dark:group-hover:via-transparent dark:group-hover:to-blue-900/10
-                                    transition-all duration-700 ease-out"></div>
-                        
-                        <!-- Thought content -->
-                        <div class="relative">
-                          <div class="space-y-3">
-                            <!-- Thought header -->
-                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
-                                                        <!-- Timestamp -->
-                          <div class="text-xs text-slate-500 dark:text-slate-400
-                                      group-hover:text-slate-600 dark:group-hover:text-slate-300
-                                      transition-colors duration-300 ease-out">
-                            <FormattedDate date={entry.data.date} showTime={true} />
-                          </div>
-                              
-                              <!-- Hashtags -->
-                              {isBlogEntry && 'tags' in entry.data && entry.data.tags && entry.data.tags.length > 0 && (
-                                <div class="flex flex-wrap gap-2">
-                                  {entry.data.tags.slice(0, 3).map((tag: string) => (
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs
-                                                bg-slate-100 dark:bg-slate-700
-                                                text-slate-600 dark:text-slate-300
-                                                group-hover:bg-gradient-to-r group-hover:from-purple-100 group-hover:to-blue-100
-                                                dark:group-hover:from-purple-900/30 dark:group-hover:to-blue-900/30
-                                                transition-all duration-300 ease-out">
-                                      #{tag}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                            
-                            <!-- Thought content -->
-                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed
-                                        group-hover:text-slate-800 dark:group-hover:text-slate-100
-                                        transition-colors duration-300 ease-out">
-                              <Content />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <InsightDisplay insight={entry as CollectionEntry<"blog">} showProjectChip={true} />
                     </div>
                   </article>
                 );
@@ -291,7 +236,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
             <div class="absolute left-[1.125rem] top-6 bottom-6 w-px bg-gradient-to-b from-slate-200 via-slate-300 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700"></div>
             
             <div class="space-y-8">
-            {insights.map(({ insight, Content }) => (
+            {insights.map(({ insight }) => (
               <article class="group relative flex items-start gap-6">
                 <!-- Timeline marker -->
                 <div class="relative flex-shrink-0 mt-3 ml-1.5">
@@ -308,63 +253,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                 
                 <!-- Thought content -->
                 <div class="flex-1 min-w-0">
-                  <!-- Thought card consistent with other cards -->
-                  <div class="relative overflow-hidden rounded-2xl p-6
-                              bg-white/60 dark:bg-slate-800/60
-                              border border-slate-200/60 dark:border-slate-700/40
-                              backdrop-blur-md
-                              transition-all duration-500 ease-out
-                              hover:bg-white/80 dark:hover:bg-slate-800/80
-                              hover:border-slate-300/80 dark:hover:border-slate-600/60
-                              hover:shadow-2xl hover:shadow-slate-200/40 dark:hover:shadow-black/40
-                              hover:scale-[1.01] hover:-translate-y-1
-                              transform-gpu">
-                    
-                    <!-- Background gradient animation -->
-                    <div class="absolute inset-0 bg-gradient-to-br 
-                                from-transparent via-transparent to-transparent
-                                group-hover:from-purple-100/20 group-hover:via-transparent group-hover:to-blue-100/20
-                                dark:group-hover:from-purple-900/10 dark:group-hover:via-transparent dark:group-hover:to-blue-900/10
-                                transition-all duration-700 ease-out"></div>
-                    
-                    <!-- Thought content -->
-                    <div class="relative">
-                      <div class="space-y-3">
-                        <!-- Thought header -->
-                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
-                          <!-- Timestamp -->
-                          <div class="text-xs text-slate-500 dark:text-slate-400
-                                      group-hover:text-slate-600 dark:group-hover:text-slate-300
-                                      transition-colors duration-300 ease-out">
-                            <FormattedDate date={insight.data.date} showTime={true} />
-                          </div>
-                          
-                          <!-- Hashtags -->
-                          {insight.data.tags && insight.data.tags.length > 0 && (
-                            <div class="flex flex-wrap gap-2">
-                              {insight.data.tags.slice(0, 3).map((tag: string) => (
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs
-                                            bg-slate-100 dark:bg-slate-700
-                                            text-slate-600 dark:text-slate-300
-                                            group-hover:bg-gradient-to-r group-hover:from-purple-100 group-hover:to-blue-100
-                                            dark:group-hover:from-purple-900/30 dark:group-hover:to-blue-900/30
-                                            transition-all duration-300 ease-out">
-                                  #{tag}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        
-                        <!-- Thought content -->
-                        <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed
-                                    group-hover:text-slate-800 dark:group-hover:text-slate-100
-                                    transition-colors duration-300 ease-out">
-                          <Content />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <InsightDisplay insight={insight} showProjectChip={true} />
                 </div>
               </article>
             ))}

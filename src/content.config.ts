@@ -10,6 +10,7 @@ const blog = defineCollection({
     draft: z.boolean().optional(),
     tags: z.array(z.string()).optional(),
     type: z.enum(["post", "insight"]).default("post"),
+    projectId: z.string().optional(),
   }),
 });
 

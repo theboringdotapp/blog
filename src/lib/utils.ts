@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { type CollectionEntry, getCollection } from "astro:content";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,4 +19,27 @@ export function readingTime(html: string) {
   const wordCount = textOnly.split(/\s+/).length;
   const readingTimeMinutes = (wordCount / 200 + 1).toFixed();
   return `${readingTimeMinutes} min read`;
+}
+
+export async function getRelatedInsights(
+  projectId: string,
+): Promise<CollectionEntry<"blog">[]> {
+  const allPosts = await getCollection("blog");
+
+  return allPosts
+    .filter(
+      (post) =>
+        !post.data.draft &&
+        post.data.type === "insight" &&
+        post.data.projectId === projectId,
+    )
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
+export async function getProjectById(
+  projectId: string,
+): Promise<CollectionEntry<"projects"> | null> {
+  const allProjects = await getCollection("projects");
+
+  return allProjects.find((project) => project.id === projectId) || null;
 }

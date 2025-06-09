@@ -3,6 +3,7 @@ title: "AI is changing how I think about debugging"
 type: "insight"
 date: 2024-01-20
 tags: ["ai", "debugging", "development"]
+projectId: "unsubscriber"
 ---
 
 Used Claude to help debug a React state issue today. Instead of spending 2 hours going through Stack Overflow, I described the problem in plain English and got a solution in minutes.
