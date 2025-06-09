@@ -2,7 +2,8 @@ import type { Metadata, Site, Socials } from "@types";
 
 export const SITE: Site = {
   TITLE: "theboring.app",
-  DESCRIPTION: "Tools and Projects made by a humnan, with AI.",
+  DESCRIPTION:
+    "Boring vibecoded apps, made in a couple of days. Learnings included.",
   EMAIL: "arthur@theboring.app",
   NUM_POSTS_ON_HOMEPAGE: 3,
   NUM_PROJECTS_ON_HOMEPAGE: 5,
@@ -10,7 +11,8 @@ export const SITE: Site = {
 
 export const HOME: Metadata = {
   TITLE: "Home",
-  DESCRIPTION: "Tools and Projects to make your life easier.",
+  DESCRIPTION:
+    "Boring vibecoded apps, made in a couple of days. Learnings included.",
 };
 
 export const BLOG: Metadata = {
