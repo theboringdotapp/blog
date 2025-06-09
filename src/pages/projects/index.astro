@@ -226,12 +226,17 @@ const otherProjects = projects;
 </Layout>
 
 <script>
-  // Deferred iframe loading with loading spinner
-  document.addEventListener('DOMContentLoaded', function() {
+  // Deferred iframe loading with loading spinner - works with Astro navigation
+  function initializeIframe() {
     const loadingElement = document.getElementById('iframe-loading');
     const iframe = document.getElementById('project-iframe') as HTMLIFrameElement;
     
     if (loadingElement && iframe) {
+      // Reset iframe state
+      iframe.src = '';
+      iframe.classList.add('hidden');
+      loadingElement.style.display = 'flex';
+      
       // Delay loading to ensure page is fully loaded
       setTimeout(() => {
         const demoURL = iframe.getAttribute('data-src');
@@ -264,7 +269,13 @@ const otherProjects = projects;
         }
       }, 1500); // 1.5 second delay after page load
     }
-  });
+  }
+
+  // Run on initial load
+  document.addEventListener('DOMContentLoaded', initializeIframe);
+  
+  // Run on Astro page navigation (this is the key fix!)
+  document.addEventListener('astro:page-load', initializeIframe);
 </script>
 
 <style>
