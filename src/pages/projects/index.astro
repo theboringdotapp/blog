@@ -21,14 +21,12 @@ const otherProjects = projects;
 <Layout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
   <Container>
     <aside data-pagefind-ignore>
-      <div class="space-y-16">
+      <div class="space-y-8 md:space-y-16">
         
         <!-- Hero Section - Latest Project -->
         {latestProject && (
           <section class="animate space-y-6">
-            <div class="space-y-2">
-            
-            </div>
+         
             
             <!-- Hero Feature Card -->
             <div class="relative overflow-hidden rounded-2xl md:rounded-3xl border border-slate-200/60 dark:border-slate-700/40
@@ -37,8 +35,9 @@ const otherProjects = projects;
               
               <!-- Header Badge and Info -->
               <div class="relative p-4 md:p-8 pb-4 md:pb-6">
-                <div class="flex items-start justify-between">
-                  <div class="space-y-4 flex-1">
+                <div class="space-y-4">
+                  <!-- Header Row: Badge + Details Link -->
+                  <div class="flex items-center justify-between">
                     <!-- Latest Release Badge -->
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 
                                 bg-gradient-to-r from-blue-50 to-purple-50 
@@ -50,19 +49,7 @@ const otherProjects = projects;
                       Latest Release
                     </div>
                     
-                    <!-- Title and Description -->
-                    <div class="space-y-2">
-                      <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 leading-tight">
-                        {latestProject.data.title}
-                      </h2>
-                      <p class="text-sm text-slate-600 dark:text-slate-400 max-w-2xl">
-                        {latestProject.data.description}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <!-- Details Link -->
-                  <div class="ml-4 md:ml-6 flex-shrink-0">
+                    <!-- Details Link -->
                     <a 
                       href={`/projects/${latestProject.id}`}
                       class="group inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 
@@ -73,6 +60,16 @@ const otherProjects = projects;
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                       </svg>
                     </a>
+                  </div>
+                  
+                  <!-- Title and Description -->
+                  <div class="space-y-2">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 leading-tight">
+                      {latestProject.data.title}
+                    </h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                      {latestProject.data.description}
+                    </p>
                   </div>
                 </div>
               </div>
