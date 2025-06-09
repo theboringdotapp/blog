@@ -270,74 +270,68 @@ const projects: CollectionEntry<"projects">[] = (
               </Link>
             </div>
             
-            <!-- Enhanced thought stream -->
-            <div class="space-y-8">
+            <!-- Thought stream -->
+            <div class="space-y-6">
               {insights.map(({ insight, Content }, index) => (
                 <div class="thought-bubble group relative"
                      style={`animation-delay: ${(index + 1) * 150}ms`}>
-                  <!-- Enhanced Glass thought container -->
-                  <div class="relative overflow-hidden rounded-3xl 
-                              bg-white/70 dark:bg-slate-900/70 
-                              backdrop-blur-2xl backdrop-saturate-200
-                              border-2 border-white/40 dark:border-slate-700/50
-                              shadow-2xl shadow-slate-200/30 dark:shadow-black/40
-                              hover:bg-white/85 dark:hover:bg-slate-800/85
-                              hover:border-white/60 dark:hover:border-slate-600/60
-                              hover:shadow-3xl hover:shadow-slate-300/40 dark:hover:shadow-black/60
-                              transition-all duration-700 ease-out
-                              hover:-translate-y-2 hover:scale-[1.02] transform-gpu
-                              before:absolute before:inset-0 before:rounded-3xl
-                              before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-slate-200/10
-                              dark:before:from-slate-300/10 dark:before:to-slate-800/20
-                              before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-700">
+                  <!-- Thought card consistent with other cards -->
+                  <div class="relative overflow-hidden rounded-2xl p-6
+                              bg-white/60 dark:bg-slate-800/60
+                              border border-slate-200/60 dark:border-slate-700/40
+                              backdrop-blur-md
+                              transition-all duration-500 ease-out
+                              hover:bg-white/80 dark:hover:bg-slate-800/80
+                              hover:border-slate-300/80 dark:hover:border-slate-600/60
+                              hover:shadow-2xl hover:shadow-slate-200/40 dark:hover:shadow-black/40
+                              hover:scale-[1.01] hover:-translate-y-1
+                              transform-gpu">
                     
-                    <!-- Enhanced breathing space and natural flow -->
-                    <div class="relative p-8">
-                      <div class="space-y-4">
-                        <!-- Mobile-friendly header -->
+                    <!-- Background gradient animation -->
+                    <div class="absolute inset-0 bg-gradient-to-br 
+                                from-transparent via-transparent to-transparent
+                                group-hover:from-purple-100/20 group-hover:via-transparent group-hover:to-blue-100/20
+                                dark:group-hover:from-purple-900/10 dark:group-hover:via-transparent dark:group-hover:to-blue-900/10
+                                transition-all duration-700 ease-out"></div>
+                    
+                    <!-- Thought content -->
+                    <div class="relative">
+                      <div class="space-y-3">
+                        <!-- Thought header -->
                         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
                           <!-- Timestamp with thought indicator -->
-                          <div class="flex items-center gap-2 text-sm font-medium text-slate-400 dark:text-slate-500 tracking-wide opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+                          <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400
+                                      group-hover:text-slate-600 dark:group-hover:text-slate-300
+                                      transition-colors duration-300 ease-out">
                             <!-- Thought bubble icon -->
-                            <svg class="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors duration-500" 
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
                                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                             </svg>
                             <FormattedDate date={insight.data.date} showTime={true} />
                           </div>
                           
-                          <!-- Mobile-friendly hashtags -->
+                          <!-- Hashtags -->
                           {insight.data.tags && insight.data.tags.length > 0 && (
-                            <div class="opacity-70 group-hover:opacity-100 transition-opacity duration-500">
-                              <div class="flex flex-wrap gap-1.5 sm:gap-2 sm:justify-end">
-                                {insight.data.tags.map((tag, tagIndex) => (
-                                  <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium
-                                              bg-white/60 dark:bg-slate-800/60
-                                              text-slate-500 dark:text-slate-400
-                                              border border-slate-200/60 dark:border-slate-700/60
-                                              rounded-full backdrop-blur-xl
-                                              hover:bg-white/80 dark:hover:bg-slate-700/80
-                                              hover:border-slate-300/60 dark:hover:border-slate-600/60
-                                              hover:text-slate-600 dark:hover:text-slate-300
-                                              transition-all duration-300 ease-out
-                                              hover:scale-105 transform-gpu"
-                                        style={`transition-delay: ${tagIndex * 50}ms`}>
-                                    #{tag}
-                                  </span>
-                                ))}
-                              </div>
+                            <div class="flex flex-wrap gap-2">
+                              {insight.data.tags.slice(0, 3).map((tag) => (
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs
+                                            bg-slate-100 dark:bg-slate-700
+                                            text-slate-600 dark:text-slate-300
+                                            group-hover:bg-gradient-to-r group-hover:from-purple-100 group-hover:to-blue-100
+                                            dark:group-hover:from-purple-900/30 dark:group-hover:to-blue-900/30
+                                            transition-all duration-300 ease-out">
+                                  #{tag}
+                                </span>
+                              ))}
                             </div>
                           )}
                         </div>
                         
-                        <!-- Natural thought typography with generous spacing -->
-                        <div class="prose prose-slate dark:prose-invert max-w-none 
-                                    text-slate-700 dark:text-slate-200 
-                                    [&>p]:leading-[1.8] [&>p]:text-base [&>p]:mb-6
-                                    [&>p:first-child]:mt-0 [&>p:last-child]:mb-0
-                                    [&>p]:transition-all [&>p]:duration-500
-                                    group-hover:[&>p]:text-slate-800 dark:group-hover:[&>p]:text-slate-100">
+                        <!-- Thought content -->
+                        <div class="text-slate-700 dark:text-slate-200 leading-relaxed
+                                    group-hover:text-slate-800 dark:group-hover:text-slate-100
+                                    transition-colors duration-300 ease-out">
                           <Content />
                         </div>
                       </div>
