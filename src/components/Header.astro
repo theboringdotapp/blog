@@ -1,7 +1,7 @@
 ---
 import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
-import { SITE } from "@consts";
+import { SITE, BLOG, PROJECTS } from "@consts";
 import { getCollection } from "astro:content";
 
 // Check if there are any published blog posts
@@ -10,55 +10,54 @@ const blogPosts = (await getCollection("blog"))
 const hasBlogPosts = blogPosts.length > 0;
 ---
 
-<header transition:persist>
-  <Container>
-    <div class="flex flex-wrap justify-between items-center gap-y-4">
-      <!-- Logo/Brand -->
-      <Link href="/" underline={false}>
-        <div class="font-bold text-lg tracking-tight
-                    text-slate-900 dark:text-slate-100
-                    hover:text-blue-600 dark:hover:text-purple-400
-                    transition-colors duration-300 ease-out
-                    group flex items-center gap-2">
-          <span class="font-extrabold text-xl text-slate-900 dark:text-slate-100 logo-vibe-coded">
-            {SITE.TITLE}
-          </span>
-      
-        </div>
-      </Link>
-      
-      <!-- Navigation -->
-      <nav class="flex items-center gap-6 text-sm">
-        <!-- Navigation Links -->
-        <div class="flex items-center gap-1 text-slate-600 dark:text-slate-300">
-          {hasBlogPosts && (
-            <>
-              <div class="px-3 py-2 rounded-lg
-                          hover:bg-slate-100/50 dark:hover:bg-slate-800/50
-                          transition-all duration-200 ease-out">
-                <Link href="/blog" underline={false}>
-                  <span class="font-medium hover:text-slate-900 dark:hover:text-slate-100
-                              transition-colors duration-200 ease-out">
-                    timeline
-                  </span>
-                </Link>
-              </div>
-              <span class="text-slate-400 dark:text-slate-500 mx-1">/</span>
-            </>
-          )}
-          <div class="px-3 py-2 rounded-lg
-                      hover:bg-slate-100/50 dark:hover:bg-slate-800/50
-                      transition-all duration-200 ease-out">
-            <Link href="/projects" underline={false}>
-              <span class="font-medium hover:text-slate-900 dark:hover:text-slate-100
-                          transition-colors duration-200 ease-out">
-                projects
-              </span>
-            </Link>
-          </div>
-        </div>
-        
-        <!-- Enhanced Search Button -->
+<header class="relative animate">
+  <div class="mx-auto flex max-w-screen-md items-center justify-between px-3 py-0">
+
+    <!-- Logo/Title Section - Proper spacing -->
+    <a 
+      href="/" 
+      class="group flex flex-col no-underline hover:scale-[1.02] transition-all duration-300 ease-out transform-gpu"
+    >
+      <div class="font-bold text-lg tracking-tight
+                  text-slate-700 dark:text-slate-300
+                  group-hover:text-slate-900 dark:group-hover:text-slate-100
+                  transition-colors duration-300 ease-out
+                  flex items-center gap-2">
+        <span class="font-extrabold text-xl text-slate-900 dark:text-slate-100 logo-vibe-coded">
+          {SITE.TITLE}
+        </span>
+      </div>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="flex items-center gap-6 text-sm">
+      <a
+        href="/blog"
+        class="relative py-2 transition-all duration-300 ease-out
+               text-slate-600 dark:text-slate-400
+               hover:text-slate-900 dark:hover:text-slate-100
+               group"
+      >
+        {BLOG.TITLE}
+        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 
+                     transition-all duration-300 ease-out 
+                     group-hover:w-full"></span>
+      </a>
+      <a
+        href="/projects"
+        class="relative py-2 transition-all duration-300 ease-out
+               text-slate-600 dark:text-slate-400
+               hover:text-slate-900 dark:hover:text-slate-100
+               group"
+      >
+        {PROJECTS.TITLE}
+        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 
+                     transition-all duration-300 ease-out 
+                     group-hover:w-full"></span>
+      </a>
+
+      <!-- Search Button -->
+      <div class="relative">
         <button
           id="magnifying-glass"
           aria-label="Search"
@@ -93,14 +92,46 @@ const hasBlogPosts = blogPosts.length > 0;
           </svg>
           <span class="hidden sm:inline">Search</span>
           <!-- Keyboard shortcut hint -->
-          <span class="hidden md:flex items-center gap-1 text-xs 
-                       text-slate-400 dark:text-slate-400
-                       bg-slate-100/50 dark:bg-slate-700/70
-                       px-2 py-1 rounded-md">
-            <span>⌘</span><span>K</span>
+          <span class="hidden md:flex items-center gap-1 text-xs
+                       text-slate-400 dark:text-slate-500
+                       group-hover:text-slate-500 dark:group-hover:text-slate-400
+                       transition-colors duration-300 ease-out">
+            <kbd class="px-1.5 py-0.5 border border-slate-200/80 dark:border-slate-600/50 rounded text-xs font-medium bg-slate-50/80 dark:bg-slate-700/50">⌘</kbd>
+            <kbd class="px-1.5 py-0.5 border border-slate-200/80 dark:border-slate-600/50 rounded text-xs font-medium bg-slate-50/80 dark:bg-slate-700/50">K</kbd>
           </span>
         </button>
-      </nav>
-    </div>
-  </Container>
+      </div>
+    </nav>
+  </div>
 </header>
+
+<script>
+  function toggleSearch() {
+    const search = document.querySelector(".pagefind-modular-input") as HTMLElement;
+    const magnifyingGlass = document.getElementById("magnifying-glass");
+    
+    if (search && magnifyingGlass) {
+      if (search.style.display === "none" || search.style.display === "") {
+        search.style.display = "block";
+        (search as HTMLInputElement).focus();
+      } else {
+        search.style.display = "none";
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const magnifyingGlass = document.getElementById("magnifying-glass");
+    if (magnifyingGlass) {
+      magnifyingGlass.addEventListener("click", toggleSearch);
+    }
+
+    // Add keyboard shortcut
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        toggleSearch();
+      }
+    });
+  });
+</script>
