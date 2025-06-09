@@ -349,9 +349,17 @@
 
 /* Modern gradient text */
 .gradient-text {
-  @apply from-accent-blue via-accent-purple to-accent-rose bg-gradient-to-r;
-  @apply bg-clip-text text-transparent;
-  @apply dark:from-accent-blue dark:via-accent-purple dark:to-accent-emerald;
+  background: linear-gradient(135deg, #ff0066, #e100ff, #7f00ff, #00c3ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(135deg, #ff0099, #c653ff, #8b5cf6, #22d3ee);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 /* Card hover effects */
