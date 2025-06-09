@@ -25,7 +25,7 @@ const insightEntries = allBlog
 const projects: CollectionEntry<"projects">[] = (
   await getCollection("projects")
 )
-  .filter((project) => !project.data.draft)
+  .filter((project) => !project.data.draft && project.data.released)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 ---
