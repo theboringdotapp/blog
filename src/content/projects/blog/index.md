@@ -3,6 +3,7 @@ title: "theboring.app website"
 description: "Landing page, with insights, projects and timeline."
 released: true
 ideaToDeploy: 2
+date: "2025-06-09"
 commits: 160
 tools: ["Cursor", "Astro"]
 models: ["claude-4-sonnet"]
