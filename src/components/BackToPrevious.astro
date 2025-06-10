@@ -7,6 +7,7 @@ const { href } = Astro.props;
 ---
 
 <a
+  id="back-to-previous"
   href={href}
   class="not-prose group relative flex w-fit flex-nowrap rounded-sm border border-black/15 py-1.5 pl-7 pr-3 transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
 >
@@ -27,7 +28,44 @@ const { href } = Astro.props;
       class="translate-x-1 transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-focus-visible:translate-x-0"
     ></polyline>
   </svg>
-  <div class="text-sm">
+  <div class="text-sm" id="back-text">
     <slot />
   </div>
 </a>
+
+<script>
+  function updateBackButton() {
+    const backLink = document.getElementById('back-to-previous') as HTMLAnchorElement;
+    const backText = document.getElementById('back-text');
+    
+    if (!backLink || !backText) return;
+    
+    // Get the 'from' parameter from current URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromParam = urlParams.get('from');
+    
+    console.log('Client-side from parameter:', fromParam);
+    
+    // Update href and text based on the from parameter
+    if (fromParam === 'homepage') {
+      backLink.href = '/';
+      backText.textContent = 'Back to homepage';
+    } else if (fromParam === 'blog') {
+      backLink.href = '/blog';
+      backText.textContent = 'Back to timeline';
+    } else if (fromParam === 'projects') {
+      backLink.href = '/projects';
+      backText.textContent = 'Back to projects';
+    } else if (fromParam === 'project') {
+      backLink.href = '/projects';
+      backText.textContent = 'Back to projects';
+    }
+    // If no from parameter, keep default values
+  }
+  
+  // Run on initial load
+  document.addEventListener('DOMContentLoaded', updateBackButton);
+  
+  // Run on Astro page navigation
+  document.addEventListener('astro:page-load', updateBackButton);
+</script>

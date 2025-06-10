@@ -4,13 +4,14 @@ import FormattedDate from "./FormattedDate.astro";
 
 type Props = {
   entry: CollectionEntry<"projects">;
+  from?: string;
 };
 
-const { entry } = Astro.props;
+const { entry, from } = Astro.props;
 ---
 
 <a
-  href={`/projects/${entry.id}`}
+  href={`/projects/${entry.id}${from ? `?from=${from}` : ''}`}
   class="not-prose group relative flex flex-col md:flex-row overflow-hidden no-underline 
          bg-white/60 dark:bg-slate-900/40
          border border-slate-200/50 dark:border-slate-700/30

@@ -154,7 +154,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                     
                     <!-- Thought content -->
                     <div class="flex-1 min-w-0">
-                      <InsightDisplay insight={entry as CollectionEntry<"blog">} showProjectChip={true} />
+                      <InsightDisplay insight={entry as CollectionEntry<"blog">} showProjectChip={true} from="blog" />
                     </div>
                   </article>
                 );
@@ -172,7 +172,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                     
                     <!-- Project content -->
                     <div class="flex-1 min-w-0">
-                      <ProjectCard entry={entry as CollectionEntry<"projects">} />
+                      <ProjectCard entry={entry as CollectionEntry<"projects">} from="blog" />
                     </div>
                   </article>
                 );
@@ -270,7 +270,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                 
                 <!-- Thought content -->
                 <div class="flex-1 min-w-0">
-                  <InsightDisplay insight={insight} showProjectChip={true} />
+                  <InsightDisplay insight={insight} showProjectChip={true} from="blog" />
                 </div>
               </article>
             ))}
@@ -298,7 +298,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                   
                   <!-- Project content -->
                   <div class="flex-1 min-w-0">
-                    <ProjectCard entry={project} />
+                    <ProjectCard entry={project} from="blog" />
                   </div>
                 </article>
               ))

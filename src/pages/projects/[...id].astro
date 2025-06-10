@@ -27,6 +27,10 @@ type Props = CollectionEntry<"projects">;
 const project = Astro.props;
 const { Content, headings } = await render(project);
 
+// Default values for server-side rendering
+let backHref = '/projects';
+let backText = 'Back to projects';
+
 // Get related insights for this project
 const relatedInsights = await getRelatedInsights(project.id);
 ---
@@ -34,7 +38,7 @@ const relatedInsights = await getRelatedInsights(project.id);
 <Layout title={project.data.title} description={project.data.description}>
   <Container>
     <div class="animate">
-      <BackToPrevious href="/projects">Back to projects</BackToPrevious>
+      <BackToPrevious href={backHref}>{backText}</BackToPrevious>
     </div>
     
     <!-- Enhanced Header Section -->
@@ -245,7 +249,7 @@ const relatedInsights = await getRelatedInsights(project.id);
           
           <div class="space-y-6">
             {relatedInsights.map((insight) => (
-              <InsightDisplay insight={insight} showProjectChip={false} />
+              <InsightDisplay insight={insight} showProjectChip={false} from="project" />
             ))}
           </div>
         </div>

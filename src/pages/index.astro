@@ -242,7 +242,7 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
                       <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Currently Developing</p>
                       <div class="space-y-2">
                         {vibeCodingProjects.map((project) => (
-                          <Link href={`/projects/${project.id}`} underline={false}>
+                          <Link href={`/projects/${project.id}?from=homepage`} underline={false}>
                             <div class="group/project inline-flex items-center gap-2 px-3 py-1.5 mr-2
                                         bg-gradient-to-r from-emerald-50 to-cyan-50 
                                         dark:from-emerald-900/30 dark:to-cyan-900/30
@@ -286,7 +286,7 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
             {
               projects.map((project, index) => (
                 <li class="project-card-wrapper" style={`animation-delay: ${(index + 1) * 100}ms`}>
-                  <ProjectCard entry={project} />
+                  <ProjectCard entry={project} from="homepage" />
                 </li>
               ))
             }
@@ -329,9 +329,9 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
             <div class="relative">
               <div class="space-y-6">
                 {insightEntries.map((insight, index) => (
-                  <div style={`animation-delay: ${(index + 1) * 150}ms`} 
-                       class={index === insightEntries.length - 1 ? "relative" : ""}>
-                    <InsightDisplay insight={insight} showProjectChip={true} />
+                                  <div style={`animation-delay: ${(index + 1) * 150}ms`} 
+                     class={index === insightEntries.length - 1 ? "relative" : ""}>
+                  <InsightDisplay insight={insight} showProjectChip={true} from="homepage" />
                     {index === insightEntries.length - 1 && (
                       <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white dark:from-slate-950 to-transparent pointer-events-none"></div>
                     )}

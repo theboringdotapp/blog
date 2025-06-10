@@ -7,9 +7,10 @@ import { render } from "astro:content";
 interface Props {
   insight: CollectionEntry<"blog">;
   showProjectChip?: boolean;
+  from?: string;
 }
 
-const { insight, showProjectChip = false } = Astro.props;
+const { insight, showProjectChip = false, from } = Astro.props;
 
 // Get project details if projectId exists and we want to show the chip
 const project = showProjectChip && insight.data.projectId 
@@ -56,7 +57,7 @@ const { Content } = await render(insight);
             <!-- Project Chip -->
             {project && (
               <a 
-                href={`/projects/${project.id}`}
+                href={`/projects/${project.id}${from ? `?from=${from}` : ''}`}
                 class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
                        bg-gradient-to-r from-blue-50 to-purple-50 
                        dark:from-blue-900/30 dark:to-purple-900/30
