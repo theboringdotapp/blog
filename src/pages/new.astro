@@ -3,182 +3,208 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/Container.astro";
 import { getCollection } from "astro:content";
 
-// Get projects for the dropdown
+// Get latest 3 projects for quick selection
 const projects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
-  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+  .sort((a, b) => {
+    // Convert MM/DD/YYYY format to proper date for sorting
+    const dateA = new Date(a.data.date);
+    const dateB = new Date(b.data.date);
+    return dateB.getTime() - dateA.getTime();
+  })
+  .slice(0, 3);
 ---
 
 <Layout title="New Insight" description="Create a new insight">
   <Container>
-    <div class="animate my-16 max-w-2xl mx-auto">
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-          Create New Insight
-        </h1>
-        <p class="text-slate-600 dark:text-slate-400">
-          Quick tool to create new insights. Only works in development mode.
-        </p>
-      </div>
-
-      <form id="insight-form" class="space-y-6">
+    <div class="animate my-8 max-w-lg mx-auto">
+      <form id="insight-form" class="space-y-4">
         <!-- Title -->
         <div>
-          <label for="title" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-            Title
-          </label>
           <input
             type="text"
             id="title"
             name="title"
             required
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
-                   bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
-                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                   transition-all duration-200"
-            placeholder="AI is changing how I think about debugging"
+            class="w-full px-4 py-3 rounded-2xl border-0 bg-slate-100 dark:bg-slate-800 
+                   text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400
+                   focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-700
+                   transition-all duration-200 text-lg"
+            placeholder="What's on your mind?"
           />
         </div>
 
         <!-- Content -->
-        <div>
-          <label for="content" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-            Content
-          </label>
+        <div class="relative">
+          <textarea
+            id="content"
+            name="content"
+            required
+            rows="6"
+            class="w-full px-4 py-3 pb-12 rounded-2xl border-0 bg-slate-100 dark:bg-slate-800 
+                   text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400
+                   focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-700
+                   transition-all duration-200 resize-none"
+            placeholder="Share your thoughts..."
+          ></textarea>
           
-          <!-- Formatting Toolbar -->
-          <div class="mb-3 p-2 bg-slate-50 dark:bg-slate-700 rounded-t-xl border border-slate-200 dark:border-slate-600 border-b-0">
-            <div class="flex flex-wrap gap-1">
-              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="bold" title="Bold">
+          <!-- Bottom Row: Formatting + Settings -->
+          <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center">
+            <!-- Formatting Toolbar (compact) -->
+            <div class="flex gap-1">
+              <button type="button" class="w-8 h-8 rounded-full bg-white/80 dark:bg-slate-700/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50 hover:bg-white dark:hover:bg-slate-700 transition-all duration-200 text-slate-600 dark:text-slate-400 text-sm flex items-center justify-center" data-action="bold" title="Bold">
                 <strong>B</strong>
               </button>
-              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="italic" title="Italic">
-                <em>I</em>
-              </button>
-              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="code" title="Code">
-                &lt;/&gt;
-              </button>
-              <div class="w-px h-6 bg-slate-300 dark:bg-slate-500 mx-1"></div>
-              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="link" title="Link">
+              <button type="button" class="w-8 h-8 rounded-full bg-white/80 dark:bg-slate-700/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50 hover:bg-white dark:hover:bg-slate-700 transition-all duration-200 text-slate-600 dark:text-slate-400 text-sm flex items-center justify-center" data-action="link" title="Link">
                 🔗
               </button>
-              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="list" title="List">
-                •
-              </button>
-              <div class="w-px h-6 bg-slate-300 dark:bg-slate-500 mx-1"></div>
               <input type="file" id="image-upload" accept="image/*" class="hidden" />
-              <button type="button" class="px-2 py-1 text-xs bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded hover:bg-slate-50 dark:hover:bg-slate-500 transition-colors duration-200 text-slate-700 dark:text-slate-300 min-w-[24px] h-6 flex items-center justify-center" data-action="image" title="Add Image">
-                🖼️
+              <button type="button" class="w-8 h-8 rounded-full bg-white/80 dark:bg-slate-700/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50 hover:bg-white dark:hover:bg-slate-700 transition-all duration-200 text-slate-600 dark:text-slate-400 text-sm flex items-center justify-center" data-action="image" title="Add Image">
+                📷
               </button>
             </div>
-          </div>
-          
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- Editor -->
-            <div>
-              <textarea
-                id="content"
-                name="content"
-                required
-                rows="12"
-                class="w-full px-4 py-3 rounded-b-xl lg:rounded-xl border border-slate-200 dark:border-slate-600
-                       bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       transition-all duration-200 resize-y font-mono text-sm"
-                placeholder="Write your insight here. You can use markdown syntax.
 
-**Bold text**
-*Italic text*
-`code`
-[Link text](url)
-- List item
-
-![Image alt text](/images/your-image.jpg)"
-              ></textarea>
-            </div>
-            
-            <!-- Preview -->
-            <div class="hidden lg:block">
-              <div class="h-full border border-slate-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800">
-                <div class="px-3 py-2 border-b border-slate-200 dark:border-slate-600 text-xs font-medium text-slate-500 dark:text-slate-400">
-                  Live Preview
-                </div>
-                <div id="preview" class="p-4 prose prose-sm dark:prose-invert max-w-none overflow-y-auto max-h-80">
-                  <em class="text-slate-400">Start typing to see preview...</em>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Instructions -->
-          <div class="mt-2 space-y-1 text-xs text-slate-500 dark:text-slate-400">
-            <div>
-              <strong>Images:</strong> Click 🖼️ to upload images. They'll be saved to <code>/public/images/</code> and the markdown will be generated automatically.
-            </div>
-            <div>
-              <strong>Shortcuts:</strong> 
-              <span class="inline-flex items-center gap-2 flex-wrap">
-                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+B</kbd> Bold
-                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+I</kbd> Italic
-                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+`</kbd> Code
-                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+K</kbd> Link
-                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+U</kbd> List
-                <kbd class="px-1 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘/Ctrl+Shift+J</kbd> Image
-              </span>
-            </div>
+            <!-- Settings Button -->
+            <button
+              type="button"
+              id="settings-toggle"
+              class="px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 
+                     hover:bg-white/80 dark:hover:bg-slate-700/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50
+                     rounded-full transition-all duration-200"
+            >
+              ⚙️ More
+            </button>
           </div>
         </div>
 
-        <!-- Tags -->
-        <div>
-          <label for="tags" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-            Tags <span class="text-slate-500">(comma-separated)</span>
-          </label>
+        <!-- Project Quick Select -->
+        {projects.length > 0 && (
+          <div class="space-y-2">
+            <p class="text-xs text-slate-500 dark:text-slate-400 text-center">Connect to project:</p>
+            <div class="flex flex-wrap gap-2 justify-center">
+              {projects.map((project) => (
+                <button
+                  type="button"
+                  class="project-btn px-3 py-1.5 text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400
+                         hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300
+                         border border-transparent hover:border-blue-200 dark:hover:border-blue-700
+                         rounded-full transition-all duration-200 cursor-pointer"
+                  data-project-id={project.id}
+                >
+                  {project.data.title}
+                </button>
+              ))}
+              <button
+                type="button"
+                id="clear-project-btn"
+                class="px-3 py-1.5 text-xs bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-500
+                       hover:bg-red-100 dark:hover:bg-red-900 hover:text-red-600 dark:hover:text-red-400
+                       border border-transparent hover:border-red-200 dark:hover:border-red-700
+                       rounded-full transition-all duration-200 cursor-pointer hidden"
+              >
+                ✕ Clear
+              </button>
+            </div>
+          </div>
+        )}
+
+
+
+        <!-- Collapsible Settings -->
+        <div id="settings-panel" class="hidden space-y-3">
+          <!-- Tags -->
           <input
             type="text"
             id="tags"
             name="tags"
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
-                   bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
-                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                   transition-all duration-200"
-            placeholder="ai, debugging, development"
+            class="w-full px-3 py-2 rounded-xl border-0 bg-slate-100 dark:bg-slate-800 
+                   text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400
+                   focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-700
+                   transition-all duration-200 text-sm"
+            placeholder="Tags (optional)"
           />
+
+          <!-- Hidden inputs -->
+          <input type="hidden" id="date" name="date" />
+          <input type="hidden" id="project" name="project" />
+
+          <!-- GitHub Settings -->
+          <div class="space-y-2 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
+            <input
+              type="password"
+              id="github-token"
+              name="github-token"
+              class="w-full px-3 py-2 rounded-lg border-0 bg-white dark:bg-slate-700 
+                     text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400
+                     focus:ring-2 focus:ring-blue-500 transition-all duration-200 text-sm"
+              placeholder="GitHub token (ghp_xxxxx)"
+            />
+            
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="github-repo"
+                name="github-repo"
+                value="theboringdotapp/blog"
+                class="flex-1 px-3 py-2 rounded-lg border-0 bg-white dark:bg-slate-700 
+                       text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400
+                       focus:ring-2 focus:ring-blue-500 transition-all duration-200 text-sm"
+                placeholder="owner/repo"
+              />
+              
+              <input
+                type="text"
+                id="github-branch"
+                name="github-branch"
+                value="main"
+                class="w-20 px-3 py-2 rounded-lg border-0 bg-white dark:bg-slate-700 
+                       text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400
+                       focus:ring-2 focus:ring-blue-500 transition-all duration-200 text-sm"
+                placeholder="branch"
+              />
+            </div>
+
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="save-github-settings"
+                name="save-github-settings"
+                class="w-3 h-3 text-blue-600 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500"
+              />
+              <label for="save-github-settings" class="text-xs text-slate-600 dark:text-slate-400">
+                Remember settings
+              </label>
+            </div>
+          </div>
         </div>
 
-        <!-- Project Connection -->
-        <div>
-          <label for="project" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-            Connect to Project <span class="text-slate-500">(optional)</span>
-          </label>
-          <select
-            id="project"
-            name="project"
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600
-                   bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
-                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                   transition-all duration-200"
+        <!-- Send Button (WhatsApp style) -->
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            id="preview-submit"
+            class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400
+                   rounded-2xl hover:bg-slate-300 dark:hover:bg-slate-600
+                   transition-all duration-200 text-sm"
           >
-            <option value="">No project connection</option>
-            {projects.map((project) => (
-              <option value={project.id}>{project.data.title}</option>
-            ))}
-          </select>
+            Preview
+          </button>
+          
+          <button
+            type="submit"
+            id="github-submit"
+            class="flex-1 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white 
+                   rounded-2xl transition-all duration-200 font-medium
+                   flex items-center justify-center gap-2
+                   disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span id="github-submit-text">Send</span>
+            <div id="github-loading" class="hidden">
+              <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+            </div>
+            <span class="text-lg">📤</span>
+          </button>
         </div>
-
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          class="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600
-                 hover:from-blue-700 hover:to-purple-700
-                 text-white font-semibold rounded-xl
-                 hover:shadow-xl hover:shadow-blue-500/25
-                 hover:scale-[1.02] transition-all duration-300 ease-out
-                 transform-gpu focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Create Insight
-        </button>
       </form>
 
       <!-- Output Area -->
@@ -217,6 +243,178 @@ const projects = (await getCollection("projects"))
 
 
 <script>
+  // Initialize date field with current date and time in user's timezone (default GMT-3)
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateField = document.getElementById('date') as HTMLInputElement;
+    if (dateField) {
+      // Try to get user's timezone, default to GMT-3 (Brazil)
+      const now = new Date();
+      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo';
+      
+      try {
+        // Use user's timezone or fallback to GMT-3
+        const localDate = new Date(now.toLocaleString("en-US", {timeZone: userTimezone}));
+        dateField.value = localDate.toISOString();
+      } catch (e) {
+        // Fallback to GMT-3 if timezone detection fails
+        const gmtMinus3 = new Date(now.getTime() - (3 * 60 * 60 * 1000));
+        dateField.value = gmtMinus3.toISOString();
+      }
+    }
+    
+    // Load saved GitHub settings
+    loadGitHubSettings();
+    
+    // Settings toggle functionality
+    const settingsToggle = document.getElementById('settings-toggle');
+    const settingsPanel = document.getElementById('settings-panel');
+    
+         settingsToggle?.addEventListener('click', () => {
+       const isHidden = settingsPanel?.classList.contains('hidden');
+       if (isHidden) {
+         settingsPanel?.classList.remove('hidden');
+         settingsToggle.textContent = '⚙️ Hide';
+       } else {
+         settingsPanel?.classList.add('hidden');
+         settingsToggle.textContent = '⚙️ More';
+       }
+     });
+
+     // Project selection functionality
+     const projectButtons = document.querySelectorAll('.project-btn');
+     const clearProjectBtn = document.getElementById('clear-project-btn');
+     const projectInput = document.getElementById('project') as HTMLInputElement;
+
+     projectButtons.forEach(btn => {
+       btn.addEventListener('click', function(this: HTMLButtonElement) {
+         // Remove active state from all buttons
+         projectButtons.forEach(b => {
+           b.classList.remove('bg-blue-500', 'dark:bg-blue-600', 'text-white', 'border-blue-500', 'dark:border-blue-600');
+           b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400', 'border-transparent');
+         });
+         
+         // Add active state to clicked button
+         this.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400', 'border-transparent');
+         this.classList.add('bg-blue-500', 'dark:bg-blue-600', 'text-white', 'border-blue-500', 'dark:border-blue-600');
+         
+         // Set project value
+         const projectId = this.getAttribute('data-project-id');
+         if (projectInput) {
+           projectInput.value = projectId || '';
+         }
+         
+         // Show clear button
+         clearProjectBtn?.classList.remove('hidden');
+       });
+     });
+
+     clearProjectBtn?.addEventListener('click', () => {
+       // Remove active state from all buttons
+       projectButtons.forEach(btn => {
+         btn.classList.remove('bg-blue-500', 'dark:bg-blue-600', 'text-white', 'border-blue-500', 'dark:border-blue-600');
+         btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400', 'border-transparent');
+       });
+       
+       // Clear project value
+       if (projectInput) {
+         projectInput.value = '';
+       }
+       
+       // Hide clear button
+       clearProjectBtn.classList.add('hidden');
+     });
+  });
+
+  // GitHub settings management
+  function saveGitHubSettings() {
+    const token = (document.getElementById('github-token') as HTMLInputElement).value;
+    const repo = (document.getElementById('github-repo') as HTMLInputElement).value;
+    const branch = (document.getElementById('github-branch') as HTMLInputElement).value;
+    const saveSettings = (document.getElementById('save-github-settings') as HTMLInputElement).checked;
+    
+    if (saveSettings && token && repo) {
+      // Simple encoding (not real encryption, just obfuscation)
+      const encoded = btoa(token);
+      localStorage.setItem('github_settings', JSON.stringify({
+        token: encoded,
+        repo,
+        branch
+      }));
+    }
+  }
+
+  function loadGitHubSettings() {
+    const saved = localStorage.getItem('github_settings');
+    if (saved) {
+      try {
+        const settings = JSON.parse(saved);
+        (document.getElementById('github-token') as HTMLInputElement).value = atob(settings.token);
+        (document.getElementById('github-repo') as HTMLInputElement).value = settings.repo;
+        (document.getElementById('github-branch') as HTMLInputElement).value = settings.branch;
+        (document.getElementById('save-github-settings') as HTMLInputElement).checked = true;
+      } catch (e) {
+        console.warn('Failed to load GitHub settings:', e);
+      }
+    }
+  }
+
+  // GitHub API functions
+  async function pushToGitHub(content: string, filename: string, token: string, repo: string, branch: string = 'main') {
+    const [owner, repoName] = repo.split('/');
+    const path = `src/content/blog/${filename}`;
+    
+    // Encode content to base64
+    const encodedContent = btoa(unescape(encodeURIComponent(content)));
+    
+    const url = `https://api.github.com/repos/${owner}/${repoName}/contents/${path}`;
+    
+    try {
+      // Check if file exists
+      let sha: string | undefined;
+      try {
+        const existingResponse = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+          }
+        });
+        
+        if (existingResponse.ok) {
+          const existingFile = await existingResponse.json();
+          sha = existingFile.sha;
+        }
+      } catch (e) {
+        // File doesn't exist, which is fine
+      }
+      
+      // Create or update file
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Add insight: ${filename}`,
+          content: encodedContent,
+          branch: branch,
+          ...(sha && { sha })
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || `GitHub API error: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('GitHub API Error:', error);
+      throw error;
+    }
+  }
+
   // Simple markdown preview (basic implementation)
   function simpleMarkdownToHtml(markdown: string): string {
     return markdown
@@ -232,18 +430,13 @@ const projects = (await getCollection("projects"))
       .replace(/^<p><\/p>/, '');
   }
 
-  // Live preview functionality
+  // Auto-expand textarea
   const contentTextarea = document.getElementById('content') as HTMLTextAreaElement;
-  const previewDiv = document.getElementById('preview');
-  
-  if (contentTextarea && previewDiv) {
+  if (contentTextarea) {
     contentTextarea.addEventListener('input', () => {
-      const markdown = contentTextarea.value;
-      if (markdown.trim()) {
-        previewDiv.innerHTML = simpleMarkdownToHtml(markdown);
-      } else {
-        previewDiv.innerHTML = '<em class="text-slate-400">Start typing to see preview...</em>';
-      }
+      // Auto-resize textarea
+      contentTextarea.style.height = 'auto';
+      contentTextarea.style.height = Math.min(contentTextarea.scrollHeight, 200) + 'px';
     });
   }
 
@@ -296,7 +489,7 @@ const projects = (await getCollection("projects"))
     const newCursorPos = start + newText.length + cursorOffset;
     textarea.setSelectionRange(newCursorPos, newCursorPos);
     
-    // Trigger preview update
+    // Trigger auto-resize
     textarea.dispatchEvent(new Event('input'));
   }
 
@@ -383,19 +576,17 @@ Please manually save "${file.name}" as "/public/images/${filename}"
     
 The image will then display correctly in your insight.`);
     
-    // Trigger preview update
+    // Trigger auto-resize
     textarea.dispatchEvent(new Event('input'));
     
     // Reset file input
     (e.target as HTMLInputElement).value = '';
   });
 
-  document.getElementById('insight-form')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target as HTMLFormElement);
+  function generateMarkdown(formData: FormData) {
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
+    const date = formData.get('date') as string;
     const tags = formData.get('tags') as string;
     const project = formData.get('project') as string;
     
@@ -407,14 +598,14 @@ The image will then display correctly in your insight.`);
       .replace(/-+/g, '-')
       .trim();
     
-    const now = new Date();
-    const dateString = now.toISOString().split('T')[0];
+    // Use the selected date
+    const selectedDate = new Date(date);
     
     // Build frontmatter
     let frontmatter = '---\n';
     frontmatter += `title: "${title}"\n`;
     frontmatter += `type: "insight"\n`;
-    frontmatter += `date: ${now.toISOString()}\n`;
+    frontmatter += `date: ${selectedDate.toISOString()}\n`;
     
     if (tags) {
       const tagArray = tags.split(',').map(tag => `"${tag.trim()}"`).join(', ');
@@ -429,22 +620,152 @@ The image will then display correctly in your insight.`);
     
     const fullMarkdown = frontmatter + content;
     
-    // Show output
+    return {
+      markdown: fullMarkdown,
+      filename: `insight-${filename}.md`
+    };
+  }
+
+  function showPreview(markdown: string, filename: string) {
     const outputDiv = document.getElementById('output');
     const markdownOutput = document.getElementById('markdown-output');
     const filenameInstruction = document.getElementById('filename-instruction');
     
     if (outputDiv && markdownOutput && filenameInstruction) {
-      markdownOutput.textContent = fullMarkdown;
+      markdownOutput.textContent = markdown;
       
       const filenameCode = filenameInstruction.querySelector('code');
       if (filenameCode) {
-        filenameCode.textContent = `src/content/blog/insight-${filename}.md`;
+        filenameCode.textContent = `src/content/blog/${filename}`;
       }
       
       outputDiv.classList.remove('hidden');
       outputDiv.scrollIntoView({ behavior: 'smooth' });
     }
+  }
+
+  function showMessage(message: string, type: 'success' | 'error' = 'success') {
+    // Create notification (WhatsApp style)
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-50 p-3 rounded-2xl shadow-lg transition-all duration-300 translate-y-[-100px] opacity-0 ${
+      type === 'success' 
+        ? 'bg-green-500 text-white' 
+        : 'bg-red-500 text-white'
+    }`;
+    notification.innerHTML = `
+      <div class="flex items-center gap-2 text-sm font-medium">
+        <span>${type === 'success' ? '✓' : '⚠'}</span>
+        <span>${message}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+      notification.style.transform = 'translate(-50%, 0)';
+      notification.style.opacity = '1';
+    });
+    
+    // Remove after delay
+    setTimeout(() => {
+      notification.style.transform = 'translate(-50%, -100px)';
+      notification.style.opacity = '0';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // GitHub form submission
+  document.getElementById('insight-form')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const { markdown, filename } = generateMarkdown(formData);
+    
+    // GitHub settings
+    const token = formData.get('github-token') as string;
+    const repo = formData.get('github-repo') as string;
+    const branch = (formData.get('github-branch') as string) || 'main';
+    
+    if (!token || !repo) {
+      showMessage('Please fill in GitHub token and repository', 'error');
+      return;
+    }
+    
+    // Save settings if requested
+    saveGitHubSettings();
+    
+    // Show loading state
+    const submitBtn = document.getElementById('github-submit') as HTMLButtonElement;
+    const submitText = document.getElementById('github-submit-text');
+    const loading = document.getElementById('github-loading');
+    
+    submitBtn.disabled = true;
+    submitText?.classList.add('hidden');
+    loading?.classList.remove('hidden');
+    
+    try {
+      await pushToGitHub(markdown, filename, token, repo, branch);
+      showMessage('Insight published! 🎉', 'success');
+      
+      // Clear form
+      (e.target as HTMLFormElement).reset();
+      
+      // Reset date to current time
+      const dateField = document.getElementById('date') as HTMLInputElement;
+      if (dateField) {
+        const now = new Date();
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo';
+        try {
+          const localDate = new Date(now.toLocaleString("en-US", {timeZone: userTimezone}));
+          dateField.value = localDate.toISOString();
+        } catch (e) {
+          const gmtMinus3 = new Date(now.getTime() - (3 * 60 * 60 * 1000));
+          dateField.value = gmtMinus3.toISOString();
+        }
+      }
+      
+      // Reset repository to default
+      const repoField = document.getElementById('github-repo') as HTMLInputElement;
+      if (repoField) {
+        repoField.value = 'theboringdotapp/blog';
+      }
+      
+             // Hide settings panel
+       const settingsPanel = document.getElementById('settings-panel');
+       const settingsToggle = document.getElementById('settings-toggle');
+       if (settingsPanel && settingsToggle) {
+         settingsPanel.classList.add('hidden');
+         settingsToggle.textContent = '⚙️ More';
+       }
+
+       // Clear project selection
+       const projectButtons = document.querySelectorAll('.project-btn');
+       const clearProjectBtn = document.getElementById('clear-project-btn');
+       projectButtons.forEach(btn => {
+         btn.classList.remove('bg-blue-500', 'dark:bg-blue-600', 'text-white', 'border-blue-500', 'dark:border-blue-600');
+         btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400', 'border-transparent');
+       });
+       clearProjectBtn?.classList.add('hidden');
+      
+         } catch (error) {
+       console.error('Push failed:', error);
+       showMessage(`Publishing failed: ${error instanceof Error ? error.message : String(error)}`, 'error');
+    } finally {
+      // Reset button state
+      submitBtn.disabled = false;
+      submitText?.classList.remove('hidden');
+      loading?.classList.add('hidden');
+    }
+  });
+  
+  // Preview button
+  document.getElementById('preview-submit')?.addEventListener('click', function() {
+    const form = document.getElementById('insight-form') as HTMLFormElement;
+    const formData = new FormData(form);
+    const { markdown, filename } = generateMarkdown(formData);
+    
+    showPreview(markdown, filename);
   });
   
   // Copy functionality
