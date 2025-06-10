@@ -73,28 +73,28 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
         <div class="space-y-6">
           <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight
                      text-slate-900 dark:text-slate-100 leading-tight">
-            <span class="gradient-text block mb-2 slide-up">vibecoded apps</span>
-            <span class=" block  slide-up" style="animation-delay: 100ms">from a burnt-out dev</span>
+            <span class="gradient-text block mb-2 hero-animate" style="animation-delay: 0ms">vibecoded apps</span>
+            <span class="block hero-animate" style="animation-delay: 80ms">from a burnt-out dev</span>
           </h1>
           
           <div class="max-w-2xl space-y-6 text-lg leading-relaxed
                       text-slate-600 dark:text-slate-300">
-            <p class="animate fade-in-up">
+            <p class="hero-animate" style="animation-delay: 160ms">
               Hi, I'm a software developer. I'm using AI to create simple, joyful tools to bring a bit of spark back to my life.
             </p>
-            <p class="animate fade-in-up" style="animation-delay: 100ms">
+            <p class="hero-animate" style="animation-delay: 240ms">
               Don't judge the code just yet, I'm still learning how to deal with the mess AI makes. 
             </p>
           </div>
         </div>
 
-        <div class="animate space-y-6 max-w-2xl fade-in-up" style="animation-delay: 200ms">
+        <div class="space-y-6 max-w-2xl hero-animate" style="animation-delay: 320ms">
           <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
             I build in public and share what I learn along the way. Reach out :) 
           </p>
           
           <!-- Social Links -->
-          <div class="flex flex-wrap gap-3">
+          <div class="flex flex-wrap gap-3 hero-animate" style="animation-delay: 400ms">
             {
               SOCIALS.map((social, index) => (
                 <Link href={social.HREF} external underline={false}>
@@ -108,8 +108,7 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
                              hover:text-slate-900 dark:hover:text-slate-50
                              hover:shadow-lg hover:shadow-slate-200/20 dark:hover:shadow-black/20
                              transition-all duration-300 ease-out
-                             backdrop-blur-sm transform-gpu hover:scale-105"
-                       style={`animation-delay: ${300 + index * 50}ms`}>
+                             backdrop-blur-sm transform-gpu hover:scale-105">
                     {social.NAME}
                   </div>
                 </Link>
@@ -126,8 +125,7 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
                          hover:text-slate-900 dark:hover:text-slate-50
                          hover:shadow-lg hover:shadow-slate-200/20 dark:hover:shadow-black/20
                          transition-all duration-300 ease-out
-                         backdrop-blur-sm transform-gpu hover:scale-105"
-                   style="animation-delay: 450ms">
+                         backdrop-blur-sm transform-gpu hover:scale-105">
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
@@ -141,17 +139,17 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
         <div class="mt-16 space-y-8">
           <!-- Tech Stack Cards -->
           <div class="space-y-6">
-            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 opacity-90">
+            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 opacity-90 hero-animate" style="animation-delay: 480ms">
               Current stack & focus
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- AI Tools Card -->
-              <div class="tech-card group relative p-5 rounded-xl border border-slate-200/60 dark:border-slate-700/40 
+              <div class="hero-animate group relative p-5 rounded-xl border border-slate-200/60 dark:border-slate-700/40 
                           bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm
                           hover:border-purple-300/50 dark:hover:border-purple-700/50
                           transition-all duration-500 ease-out hover:shadow-lg hover:shadow-purple-200/15 dark:hover:shadow-purple-900/15
-                          hover:-translate-y-0.5 transform-gpu">
+                          hover:-translate-y-0.5 transform-gpu" style="animation-delay: 560ms">
                 <div class="relative space-y-3">
                   <div class="flex items-center gap-3">
                     <div class="size-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 p-1.5 rotate-1 group-hover:rotate-3 transition-transform duration-500">
@@ -180,11 +178,11 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
               </div>
 
               <!-- AI Spending Card -->
-              <div class="tech-card group relative p-5 rounded-xl border border-slate-200/60 dark:border-slate-700/40 
+              <div class="hero-animate group relative p-5 rounded-xl border border-slate-200/60 dark:border-slate-700/40 
                           bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm
                           hover:border-green-300/50 dark:hover:border-green-700/50
                           transition-all duration-500 ease-out hover:shadow-lg hover:shadow-green-200/15 dark:hover:shadow-green-900/15
-                          hover:-translate-y-0.5 transform-gpu">
+                          hover:-translate-y-0.5 transform-gpu" style="animation-delay: 640ms">
                 <div class="relative space-y-3">
                   <div class="flex items-center gap-3">
                     <div class="size-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 p-1.5 -rotate-1 group-hover:-rotate-3 transition-transform duration-500">
@@ -205,10 +203,10 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
           </div>
 
           <!-- Current Focus & Vibe Section -->
-          <div class="space-y-4">
+          <div class="space-y-4 hero-animate" style="animation-delay: 720ms">
             <div class="bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm rounded-xl border border-slate-200/50 dark:border-slate-700/40 p-6 space-y-4">
               <!-- Current Technical Challenge -->
-              <div class="focus-item group flex items-start gap-4 p-3 rounded-lg 
+              <div class="group flex items-start gap-4 p-3 rounded-lg 
                           hover:bg-slate-50/50 dark:hover:bg-slate-800/30
                           transition-all duration-300 ease-out">
                 <div class="status-dot size-2 rounded-full bg-amber-500 mt-2.5 pulse-glow"></div>
@@ -220,7 +218,7 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
               
               <!-- Current Vibe -->
               {latestInsight && (
-                <div class="focus-item group flex items-start gap-4 p-3 rounded-lg 
+                <div class="group flex items-start gap-4 p-3 rounded-lg 
                             hover:bg-slate-50/50 dark:hover:bg-slate-800/30
                             transition-all duration-300 ease-out">
                   <div class="status-dot size-2 rounded-full bg-cyan-500 mt-2.5 pulse-glow"></div>
@@ -235,7 +233,7 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
               
               <!-- Vibe Coding Projects -->
               {vibeCodingProjects.length > 0 && (
-                <div class="focus-item group p-3 rounded-lg 
+                <div class="group p-3 rounded-lg 
                             hover:bg-slate-50/50 dark:hover:bg-slate-800/30
                             transition-all duration-300 ease-out">
                   <div class="flex items-start gap-4">

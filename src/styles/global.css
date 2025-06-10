@@ -148,9 +148,28 @@
   transition-delay: 250ms;
 }
 
-/* New Product-like Animations */
+/* Apple-like Hero Animations */
 
-/* Slide up animation for hero */
+/* Refined hero animation with perfect Apple-like timing */
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.hero-animate {
+  animation: heroReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+/* Legacy animations for backwards compatibility */
 @keyframes slideUp {
   from {
     opacity: 0;
