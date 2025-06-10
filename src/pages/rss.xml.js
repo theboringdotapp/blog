@@ -9,9 +9,12 @@ export async function GET(context) {
     (project) => !project.data.draft && project.data.released,
   );
 
-  const items = [...blog, ...projects].sort(
-    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
-  );
+  const items = [...blog, ...projects]
+    .filter((item) => item.data.date) // Only include items with dates for RSS
+    .sort(
+      (a, b) =>
+        new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+    );
 
   return rss({
     title: SITE.TITLE,

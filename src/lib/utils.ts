@@ -33,7 +33,12 @@ export async function getRelatedInsights(
         post.data.type === "insight" &&
         post.data.projectId === projectId,
     )
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+    .sort((a, b) => {
+      if (!a.data.date && !b.data.date) return 0;
+      if (!a.data.date) return -1; // Items without dates come first (future)
+      if (!b.data.date) return 1;
+      return b.data.date.valueOf() - a.data.date.valueOf();
+    });
 }
 
 export async function getProjectById(

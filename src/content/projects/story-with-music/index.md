@@ -1,9 +1,7 @@
 ---
 title: "Story with Music"
 description: "Generate immersive stories with matching background music using AI composition."
-date: "2025-06-09"
 released: false
-ideaToDeploy: 12
 tools: ["Cursor", "Astro", "Vercel", "OpenAI"]
 models: ["claude-4-sonnet", "suno-api"]
 summary: |

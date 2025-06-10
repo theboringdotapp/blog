@@ -12,7 +12,12 @@ import type { CollectionEntry } from "astro:content";
 
 const allBlog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  });
 
 // Separate posts and insights
 const blogPosts = allBlog
@@ -26,13 +31,23 @@ const insightEntries = allBlog
 // Get the latest insight for current vibe
 const latestInsight = allBlog
   .filter((entry) => entry.data.type === "insight")
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
+  .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  })[0];
 
 const projects: CollectionEntry<"projects">[] = (
   await getCollection("projects")
 )
   .filter((project) => !project.data.draft && project.data.released)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  })
   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
 // Get unreleased projects for vibe coding section
@@ -40,7 +55,12 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
   await getCollection("projects")
 )
   .filter((project) => !project.data.draft && !project.data.released)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  })
   .slice(0, 3);
 ---
 
@@ -224,9 +244,8 @@ const vibeCodingProjects: CollectionEntry<"projects">[] = (
                                         hover:from-emerald-100 hover:to-cyan-100
                                         dark:hover:from-emerald-900/50 dark:hover:to-cyan-900/50
                                         transition-all duration-200">
-                              <div class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
                               {project.data.title}
-                              <svg class="size-3 opacity-0 group-hover/project:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg class="size-3  transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                               </svg>
                             </div>

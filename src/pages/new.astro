@@ -7,6 +7,9 @@ import { getCollection } from "astro:content";
 const projects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
   .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
     // Convert MM/DD/YYYY format to proper date for sorting
     const dateA = new Date(a.data.date);
     const dateB = new Date(b.data.date);

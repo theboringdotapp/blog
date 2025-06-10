@@ -11,11 +11,21 @@ import { BLOG } from "@consts";
 
 const allBlog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  });
 
 const allProjects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  });
 
 // Pre-render insights
 const insightEntries = allBlog.filter((entry) => entry.data.type === "insight");
@@ -36,7 +46,12 @@ insights.forEach(({ insight, Content }) => {
 
 // Combine all entries (blog posts, insights, and projects) and sort chronologically
 const allEntries = [...allBlog, ...allProjects]
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .sort((a, b) => {
+    if (!a.data.date && !b.data.date) return 0;
+    if (!a.data.date) return -1; // Items without dates come first (future)
+    if (!b.data.date) return 1;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  });
 
 // Separate content types for different display treatments
 const posts = blogPosts;
@@ -48,6 +63,7 @@ type Acc = {
 
 // Group posts by year for traditional blog view
 const postsByYear = posts.reduce((acc: Acc, post) => {
+  if (!post.data.date) return acc; // Skip posts without dates
   const year = post.data.date.getFullYear().toString();
   if (!acc[year]) {
     acc[year] = [];

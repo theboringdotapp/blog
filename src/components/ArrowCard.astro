@@ -56,11 +56,13 @@ const isBlog = entry.collection === "blog";
     
     <!-- Metadata section -->
     <div class="flex items-center gap-4 mt-2">
-      <span class="text-xs text-slate-500 dark:text-slate-400
-                   group-hover:text-slate-600 dark:group-hover:text-slate-300
-                   transition-colors duration-300 ease-out">
-        <FormattedDate date={entry.data.date} />
-      </span>
+      {entry.data.date && (
+        <span class="text-xs text-slate-500 dark:text-slate-400
+                     group-hover:text-slate-600 dark:group-hover:text-slate-300
+                     transition-colors duration-300 ease-out">
+          <FormattedDate date={entry.data.date} />
+        </span>
+      )}
       
       {isProject && entry.data.ideaToDeploy && (
         <span class="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400
