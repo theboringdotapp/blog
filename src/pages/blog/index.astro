@@ -156,7 +156,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                     
                     <!-- Project content -->
                     <div class="flex-1 min-w-0">
-                      <ArrowCard entry={entry} />
+                      <ProjectCard entry={entry as CollectionEntry<"projects">} />
                     </div>
                   </article>
                 );
@@ -282,7 +282,7 @@ const years = Object.keys(postsByYear).sort((a, b) => parseInt(b) - parseInt(a))
                   
                   <!-- Project content -->
                   <div class="flex-1 min-w-0">
-                    <ArrowCard entry={project} />
+                    <ProjectCard entry={project} />
                   </div>
                 </article>
               ))
