@@ -29,6 +29,7 @@ const projects = defineCollection({
     tools: z.array(z.string()).optional(),
     models: z.array(z.string()).optional(),
     summary: z.string().optional(),
+    screenshot: z.string().optional(),
   }),
 });
 

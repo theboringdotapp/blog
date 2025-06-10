@@ -8,6 +8,7 @@ ideaToDeploy: 6
 commits: 114
 tools: ["Cursor", "Vercel"]
 models: ["claude-3.7-sonnet", "gemini-2.5-pro" ]
+screenshot: "/unsubscriber.png"
 summary: | 
     While cleaning my email inbox, I wondered how muhc of it could be automated.
     

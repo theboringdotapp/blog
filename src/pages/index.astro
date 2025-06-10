@@ -3,6 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/Container.astro";
 import { SITE, HOME, SOCIALS } from "@consts";
 import ArrowCard from "@components/ArrowCard.astro";
+import ProjectCard from "@components/ProjectCard.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import Link from "@components/Link.astro";
 import InsightDisplay from "@components/InsightDisplay.astro";
@@ -220,11 +221,11 @@ const projects: CollectionEntry<"projects">[] = (
               </div>
             </Link>
           </div>
-          <ul class="not-prose grid gap-6">
+          <ul class="not-prose flex flex-col gap-6">
             {
               projects.map((project, index) => (
                 <li class="project-card-wrapper" style={`animation-delay: ${(index + 1) * 100}ms`}>
-                  <ArrowCard entry={project} />
+                  <ProjectCard entry={project} />
                 </li>
               ))
             }

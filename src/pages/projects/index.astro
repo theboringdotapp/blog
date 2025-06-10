@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/Container.astro";
 import ArrowCard from "@components/ArrowCard.astro";
+import ProjectCard from "@components/ProjectCard.astro";
 import { PROJECTS } from "@consts";
 import { formatDate } from "@lib/utils";
 
@@ -211,10 +212,10 @@ const otherProjects = projects;
             </div>
           )}
           
-          <ul class="animate not-prose flex flex-col gap-4">
+          <ul class="animate not-prose flex flex-col gap-6">
             {otherProjects.map((project, index) => (
               <li class="animate" style={`animation-delay: ${(index + 1) * 50}ms`}>
-                <ArrowCard entry={project} />
+                <ProjectCard entry={project} />
               </li>
             ))}
           </ul>

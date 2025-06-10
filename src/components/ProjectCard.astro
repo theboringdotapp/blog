@@ -1,0 +1,226 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+
+type Props = {
+  entry: CollectionEntry<"projects">;
+};
+
+const { entry } = Astro.props;
+---
+
+<a
+  href={`/projects/${entry.id}`}
+  class="not-prose group relative flex flex-col md:flex-row overflow-hidden no-underline 
+         bg-white/80 dark:bg-slate-800/80
+         backdrop-blur-md
+         transition-all duration-700 ease-out
+         hover:bg-white/95 dark:hover:bg-slate-800/95
+         hover:shadow-2xl hover:shadow-slate-200/60 dark:hover:shadow-black/60
+         hover:-translate-y-2
+         focus-visible:bg-white/95 dark:focus-visible:bg-slate-800/95
+         transform-gpu min-h-[320px] md:min-h-[280px]"
+>
+  <!-- Background gradient animation -->
+  <div class="absolute inset-0 bg-gradient-to-br 
+              from-transparent via-transparent to-transparent
+              group-hover:from-purple-50/30 group-hover:via-transparent group-hover:to-blue-50/30
+              dark:group-hover:from-purple-900/15 dark:group-hover:via-transparent dark:group-hover:to-blue-900/15
+              transition-all duration-700 ease-out"></div>
+
+  <!-- Screenshot/Header Section with Liquid Glass Browser Frame -->
+  <div class="relative flex-shrink-0 h-48 md:h-auto md:w-80 overflow-visible p-3 md:p-4">
+    {entry.data.screenshot ? (
+      <!-- Liquid Glass Browser Frame -->
+      <div class="relative w-full h-full bg-white/90 dark:bg-slate-800/90 rounded-xl overflow-hidden
+                  backdrop-blur-xl
+                  border border-white/20 dark:border-slate-700/30
+                  shadow-lg shadow-black/5 dark:shadow-black/20
+                  transition-all duration-700 ease-out
+                  group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-black/10 dark:group-hover:shadow-black/30
+                  group-hover:rotate-1 group-hover:backdrop-blur-2xl">
+        
+        <!-- Browser Header -->
+        <div class="flex items-center gap-2 px-3 py-2 bg-black/5 dark:bg-white/5 backdrop-blur-sm
+                    border-b border-black/10 dark:border-white/10">
+          <!-- Traffic Light Buttons -->
+          <div class="flex items-center gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-green-400/80"></div>
+          </div>
+        </div>
+        
+        <!-- Screenshot -->
+        <div class="relative w-full flex-1 overflow-hidden">
+          <img 
+            src={entry.data.screenshot} 
+            alt={`${entry.data.title} screenshot`}
+            class="w-full h-full object-cover object-top 
+                   transition-all duration-700 ease-out"
+            loading="lazy"
+          />
+        </div>
+        
+        <!-- View Button - Bottom Center Slide Up -->
+        <div class="absolute bottom-0 left-0 right-0 flex justify-center
+                    opacity-0 group-hover:opacity-100
+                    transition-all duration-500 ease-out
+                    transform translate-y-4 group-hover:translate-y-0">
+          <div class="mb-4 inline-flex items-center gap-2 px-4 py-2
+                      bg-white/90 dark:bg-slate-800/90
+                      backdrop-blur-xl
+                      border border-white/30 dark:border-slate-700/40
+                      text-slate-800 dark:text-slate-200
+                      text-sm font-medium rounded-full
+                      shadow-lg shadow-black/10 dark:shadow-black/30
+                      hover:bg-white/95 dark:hover:bg-slate-700/95
+                      hover:shadow-xl hover:shadow-black/15 dark:hover:shadow-black/40
+                      transition-all duration-300 ease-out">
+            View Project
+            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <!-- Fallback gradient with project icon (liquid glass design) -->
+      <div class="w-full h-full bg-gradient-to-br from-blue-500/90 via-purple-500/90 to-pink-500/90 
+                  rounded-xl backdrop-blur-xl
+                  flex items-center justify-center text-white text-4xl font-bold
+                  border border-white/20
+                  shadow-lg shadow-black/5
+                  transition-all duration-700 ease-out
+                  group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-black/10
+                  group-hover:rotate-1">
+        {entry.data.title.charAt(0)}
+      </div>
+    )}
+    
+    <!-- Status indicators overlay -->
+    <div class="absolute top-5 right-5 flex gap-2 z-10">
+      {entry.data.demoURL && (
+        <div class="inline-flex items-center gap-1 px-2.5 py-1 
+                    bg-emerald-500/90 backdrop-blur-sm
+                    text-white text-xs font-medium rounded-full
+                    border border-emerald-400/50
+                    shadow-sm shadow-black/10
+                    opacity-0 group-hover:opacity-100
+                    transition-all duration-500 ease-out
+                    transform translate-y-1 group-hover:translate-y-0">
+          <div class="size-1.5 rounded-full bg-white animate-pulse"></div>
+          Live
+        </div>
+      )}
+      
+      {!entry.data.released && (
+        <div class="inline-flex items-center gap-1 px-2.5 py-1 
+                    bg-amber-500/90 backdrop-blur-sm
+                    text-white text-xs font-medium rounded-full
+                    border border-amber-400/50
+                    shadow-sm shadow-black/10">
+          <div class="size-1.5 rounded-full bg-white animate-pulse"></div>
+          Vibe Coding
+        </div>
+      )}
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="relative flex-1 flex flex-col p-6 md:py-8 md:pr-8 space-y-6">
+    <!-- Title and Description -->
+    <div class="space-y-3">
+      <h3 class="font-bold text-xl md:text-2xl text-slate-900 dark:text-slate-50 leading-tight
+                 group-hover:text-transparent group-hover:bg-gradient-to-r 
+                 group-hover:from-blue-600 group-hover:to-purple-600
+                 dark:group-hover:from-purple-400 dark:group-hover:to-blue-400
+                 group-hover:bg-clip-text
+                 transition-all duration-500 ease-out">
+        {entry.data.title}
+      </h3>
+      
+      <!-- Description with more space -->
+      <p class="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed
+                md:line-clamp-3 line-clamp-2 group-hover:text-slate-700 dark:group-hover:text-slate-200
+                transition-colors duration-300 ease-out">
+        {entry.data.description}
+      </p>
+    </div>
+    
+    <!-- Metadata row -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+        <span class="group-hover:text-slate-600 dark:group-hover:text-slate-300
+                     transition-colors duration-300 ease-out">
+          <FormattedDate date={entry.data.date} />
+        </span>
+        
+        {entry.data.ideaToDeploy && (
+          <span class="inline-flex items-center gap-1.5
+                       group-hover:text-slate-600 dark:group-hover:text-slate-300
+                       transition-colors duration-300 ease-out">
+            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            Built in {entry.data.ideaToDeploy} days
+          </span>
+        )}
+        
+        {entry.data.commits && (
+          <span class="hidden md:inline-flex items-center gap-1.5
+                       group-hover:text-slate-600 dark:group-hover:text-slate-300
+                       transition-colors duration-300 ease-out">
+            <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"/>
+            </svg>
+            {entry.data.commits} commits
+          </span>
+        )}
+      </div>
+    </div>
+    
+    <!-- Tools/Tech stack indicator -->
+    {entry.data.tools && entry.data.tools.length > 0 && (
+      <div class="flex items-center gap-3 pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
+        <svg class="size-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <div class="flex items-center gap-2 overflow-hidden">
+          <div class="flex gap-2 flex-wrap">
+            {entry.data.tools.slice(0, 6).map((tool) => (
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm whitespace-nowrap flex-shrink-0
+                           bg-slate-100 dark:bg-slate-700/50
+                           text-slate-600 dark:text-slate-300
+                           border border-slate-200/60 dark:border-slate-600/40
+                           group-hover:bg-gradient-to-r group-hover:from-purple-100/50 group-hover:to-blue-100/50
+                           dark:group-hover:from-purple-900/20 dark:group-hover:to-blue-900/20
+                           transition-all duration-300 ease-out">
+                {tool}
+              </span>
+            ))}
+            {entry.data.tools.length > 6 && (
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm whitespace-nowrap flex-shrink-0
+                           bg-slate-100 dark:bg-slate-700/50
+                           text-slate-500 dark:text-slate-400
+                           border border-slate-200/60 dark:border-slate-600/40">
+                +{entry.data.tools.length - 6}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</a>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style> 

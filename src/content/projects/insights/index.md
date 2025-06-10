@@ -8,6 +8,7 @@ ideaToDeploy: 30
 commits: 133
 tools: ["Cursor", "Vercel", "Claude Code CLI"]
 models: ["claude-3.7-sonnet", "gemini-2.5-pro" ]
+screenshot: "/insights.png"
 summary: | 
     I manage a few developers and it takes me quite some time to review their work and performance. 
     
