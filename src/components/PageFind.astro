@@ -33,15 +33,37 @@ import Search from "astro-pagefind/components/Search";
 <script is:inline>
   const magnifyingGlass = document.getElementById("magnifying-glass");
   const backdrop = document.getElementById("backdrop");
+  let pagefindLoaded = false;
+
+  // Lazy load Pagefind when needed
+  function loadPagefind() {
+    if (pagefindLoaded) return Promise.resolve();
+    
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = '/pagefind/pagefind-ui.js';
+      script.onload = () => {
+        pagefindLoaded = true;
+        resolve();
+      };
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
 
   function openPagefind() {
-    const searchDiv = document.getElementById("search");
-    const search = searchDiv.querySelector("input");
-    setTimeout(() => {
-      search.focus();
-    }, 0);
-    backdrop?.classList.remove("invisible");
-    backdrop?.classList.add("visible");
+    // Load Pagefind first if not already loaded
+    loadPagefind().then(() => {
+      const searchDiv = document.getElementById("search");
+      const search = searchDiv.querySelector("input");
+      setTimeout(() => {
+        search.focus();
+      }, 0);
+      backdrop?.classList.remove("invisible");
+      backdrop?.classList.add("visible");
+    }).catch(error => {
+      console.error('Failed to load Pagefind:', error);
+    });
   }
 
   function closePagefind() {

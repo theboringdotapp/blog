@@ -65,9 +65,14 @@ const { title, description, image = "/og.png" } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-<!-- PageFind -->
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<!-- PageFind - Optimized loading to improve LCP -->
+<link 
+  href="/pagefind/pagefind-ui.css" 
+  rel="preload" 
+  as="style" 
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript><link href="/pagefind/pagefind-ui.css" rel="stylesheet" /></noscript>
 
 <!-- Vercel Analytics -->
 <Analytics />
