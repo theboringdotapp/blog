@@ -7,7 +7,7 @@ ideaToDeploy: 1
 commits: 24
 tools: ["Cursor", "v0", "Github Actions", "Vercel"]
 models: ["claude-4-sonnet", "ChatGPT (image generation)" ]
-screenshot: "/whereisvini.png"
+screenshot: "/whereisvini.jpg"
 summary: |
   My brother is constantly traveling and I never know where he is or when his next trip is.
   

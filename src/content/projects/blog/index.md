@@ -7,7 +7,7 @@ date: "2025-06-09"
 commits: 160
 tools: ["Cursor", "Astro"]
 models: ["claude-4-sonnet"]
-screenshot: "/blog.png"
+screenshot: "/blog.jpg"
 demoURL: "https://theboring.app"
 summary: |
     I wanted a page to share my learnings and thoughts to the world. 
