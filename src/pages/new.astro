@@ -45,7 +45,7 @@ const projects = (await getCollection("projects"))
                    text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400
                    focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-700
                    transition-all duration-200 resize-none"
-            placeholder="Share your thoughts..."
+            placeholder="Share your thoughts... (Drag & drop screenshots here!)"
           ></textarea>
           
           <!-- Bottom Row: Formatting + Settings -->
@@ -244,23 +244,24 @@ const projects = (await getCollection("projects"))
 
 <script>
   // Initialize date field with current date and time in user's timezone (default GMT-3)
-  document.addEventListener('DOMContentLoaded', () => {
+  function initializeDateField() {
     const dateField = document.getElementById('date') as HTMLInputElement;
     if (dateField) {
       // Try to get user's timezone, default to GMT-3 (Brazil)
       const now = new Date();
-      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo';
       
       try {
-        // Use user's timezone or fallback to GMT-3
-        const localDate = new Date(now.toLocaleString("en-US", {timeZone: userTimezone}));
-        dateField.value = localDate.toISOString();
+        // Use current date/time in ISO format
+        dateField.value = now.toISOString();
       } catch (e) {
-        // Fallback to GMT-3 if timezone detection fails
-        const gmtMinus3 = new Date(now.getTime() - (3 * 60 * 60 * 1000));
-        dateField.value = gmtMinus3.toISOString();
+        // Ultimate fallback
+        dateField.value = new Date().toISOString();
       }
     }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeDateField();
     
     // Load saved GitHub settings
     loadGitHubSettings();
@@ -359,6 +360,48 @@ const projects = (await getCollection("projects"))
   }
 
   // GitHub API functions
+  async function uploadImageToGitHub(file: File, filename: string, token: string, repo: string, branch: string = 'main') {
+    const [owner, repoName] = repo.split('/');
+    const path = `public/screenshots/${filename}`;
+    
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64Content = (reader.result as string).split(',')[1]; // Remove data:image/...;base64, prefix
+          
+          const url = `https://api.github.com/repos/${owner}/${repoName}/contents/${path}`;
+          
+          const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github.v3+json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: `Add screenshot: ${filename}`,
+              content: base64Content,
+              branch: branch
+            })
+          });
+          
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || `GitHub API error: ${response.status}`);
+          }
+          
+          resolve(await response.json());
+        } catch (error) {
+          reject(error);
+        }
+      };
+      
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   async function pushToGitHub(content: string, filename: string, token: string, repo: string, branch: string = 'main') {
     const [owner, repoName] = repo.split('/');
     const path = `src/content/blog/${filename}`;
@@ -438,6 +481,148 @@ const projects = (await getCollection("projects"))
       contentTextarea.style.height = 'auto';
       contentTextarea.style.height = Math.min(contentTextarea.scrollHeight, 200) + 'px';
     });
+  }
+
+  // Store dropped images temporarily
+  let droppedImages: { file: File; filename: string; position: number }[] = [];
+
+  // Image compression function
+  function compressImage(file: File, maxWidth: number = 1200, maxHeight: number = 800, quality: number = 0.8): Promise<File> {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions
+        let { width, height } = img;
+        
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+          width *= ratio;
+          height *= ratio;
+        }
+        
+        // Set canvas dimensions
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg', // Convert to JPEG for better compression
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          } else {
+            resolve(file); // Fallback to original
+          }
+        }, 'image/jpeg', quality);
+      };
+      
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  // Shared image handling function
+  async function handleImageFile(file: File, position: number) {
+    // Show compression feedback
+    showMessage(`🔄 Compressing image...`, 'success');
+    
+    // Compress the image
+    const compressedFile = await compressImage(file);
+    
+    // Generate unique filename (always use .jpg for compressed images)
+    const timestamp = Date.now();
+    const filename = `screenshot-${timestamp}.jpg`;
+    
+    // Store compressed file for later upload
+    droppedImages.push({ file: compressedFile, filename, position });
+
+    // Insert markdown at position with size constraints
+    const imageMarkdown = `<img src="/screenshots/${filename}" alt="Screenshot" style="max-width: 100%; height: auto; max-height: 400px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />`;
+    
+    const textarea = document.getElementById('content') as HTMLTextAreaElement;
+    const beforeText = textarea.value.substring(0, position);
+    const afterText = textarea.value.substring(position);
+    
+    textarea.value = beforeText + imageMarkdown + afterText;
+    
+    // Move cursor after inserted markdown
+    const newCursorPos = position + imageMarkdown.length;
+    textarea.setSelectionRange(newCursorPos, newCursorPos);
+    
+    // Trigger auto-resize
+    textarea.dispatchEvent(new Event('input'));
+    
+    // Calculate compression savings
+    const originalSize = (file.size / 1024).toFixed(1);
+    const compressedSize = (compressedFile.size / 1024).toFixed(1);
+    const savings = ((1 - compressedFile.size / file.size) * 100).toFixed(0);
+    
+    // Show feedback with compression info
+    showMessage(`📷 Screenshot ready! ${originalSize}KB → ${compressedSize}KB (${savings}% smaller)`, 'success');
+  }
+
+  // Drag and drop functionality
+  if (contentTextarea) {
+    let dragCounter = 0;
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      contentTextarea.addEventListener(eventName, preventDefaults, false);
+      document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e: Event) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    // Highlight drop area
+    ['dragenter', 'dragover'].forEach(eventName => {
+      contentTextarea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      contentTextarea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      dragCounter++;
+      contentTextarea.classList.add('border-2', 'border-blue-400', 'border-dashed', 'bg-blue-50', 'dark:bg-blue-900/20');
+    }
+
+    function unhighlight() {
+      dragCounter--;
+      if (dragCounter === 0) {
+        contentTextarea.classList.remove('border-2', 'border-blue-400', 'border-dashed', 'bg-blue-50', 'dark:bg-blue-900/20');
+      }
+    }
+
+    // Handle dropped files
+    contentTextarea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e: DragEvent) {
+      const files = e.dataTransfer?.files;
+      if (!files) return;
+
+      // Get cursor position at drop
+      const cursorPosition = contentTextarea.selectionStart;
+
+      handleFiles(files, cursorPosition);
+    }
+
+    function handleFiles(files: FileList, position: number) {
+      ([...files]).forEach(file => {
+        if (file.type.startsWith('image/')) {
+          handleImageFile(file, position);
+        }
+      });
+    }
   }
 
   // Format text function (shared between toolbar and keyboard shortcuts)
@@ -548,36 +733,12 @@ const projects = (await getCollection("projects"))
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
     
-    // Generate filename
-    const timestamp = Date.now();
-    const extension = file.name.split('.').pop();
-    const filename = `insight-${timestamp}.${extension}`;
-    
-    // Create markdown for the image
-    const imageMarkdown = `![${file.name}](/images/${filename})`;
-    
-    // Insert at cursor position
+    // Get cursor position
     const textarea = document.getElementById('content') as HTMLTextAreaElement;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const beforeText = textarea.value.substring(0, start);
-    const afterText = textarea.value.substring(end);
+    const cursorPosition = textarea.selectionStart;
     
-    textarea.value = beforeText + imageMarkdown + afterText;
-    textarea.focus();
-    
-    const newCursorPos = start + imageMarkdown.length;
-    textarea.setSelectionRange(newCursorPos, newCursorPos);
-    
-    // Show instruction to user
-    alert(`Image reference added! 
-    
-Please manually save "${file.name}" as "/public/images/${filename}" 
-    
-The image will then display correctly in your insight.`);
-    
-    // Trigger auto-resize
-    textarea.dispatchEvent(new Event('input'));
+    // Use the same function as drag and drop
+    handleImageFile(file, cursorPosition);
     
     // Reset file input
     (e.target as HTMLInputElement).value = '';
@@ -598,8 +759,17 @@ The image will then display correctly in your insight.`);
       .replace(/-+/g, '-')
       .trim();
     
-    // Use the selected date
-    const selectedDate = new Date(date);
+    // Use the selected date with fallback to current time
+    let selectedDate: Date;
+    if (date && date.trim()) {
+      selectedDate = new Date(date);
+      // Check if date is valid
+      if (isNaN(selectedDate.getTime())) {
+        selectedDate = new Date(); // Fallback to current time
+      }
+    } else {
+      selectedDate = new Date(); // Fallback to current time
+    }
     
     // Build frontmatter
     let frontmatter = '---\n';
@@ -704,26 +874,33 @@ The image will then display correctly in your insight.`);
     submitText?.classList.add('hidden');
     loading?.classList.remove('hidden');
     
-    try {
+        try {
+      // Upload images first if any
+      if (droppedImages.length > 0) {
+        for (const image of droppedImages) {
+          try {
+            await uploadImageToGitHub(image.file, image.filename, token, repo, branch);
+            showMessage(`📷 Uploaded: ${image.filename}`, 'success');
+          } catch (imageError) {
+            console.error('Image upload failed:', imageError);
+            showMessage(`Failed to upload ${image.filename}: ${imageError instanceof Error ? imageError.message : String(imageError)}`, 'error');
+            // Continue with other images and content
+          }
+        }
+      }
+      
+      // Then push the content
       await pushToGitHub(markdown, filename, token, repo, branch);
       showMessage('Insight published! 🎉', 'success');
       
       // Clear form
       (e.target as HTMLFormElement).reset();
       
+      // Clear dropped images array
+      droppedImages = [];
+      
       // Reset date to current time
-      const dateField = document.getElementById('date') as HTMLInputElement;
-      if (dateField) {
-        const now = new Date();
-        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo';
-        try {
-          const localDate = new Date(now.toLocaleString("en-US", {timeZone: userTimezone}));
-          dateField.value = localDate.toISOString();
-        } catch (e) {
-          const gmtMinus3 = new Date(now.getTime() - (3 * 60 * 60 * 1000));
-          dateField.value = gmtMinus3.toISOString();
-        }
-      }
+      initializeDateField();
       
       // Reset repository to default
       const repoField = document.getElementById('github-repo') as HTMLInputElement;
@@ -731,22 +908,22 @@ The image will then display correctly in your insight.`);
         repoField.value = 'theboringdotapp/blog';
       }
       
-             // Hide settings panel
-       const settingsPanel = document.getElementById('settings-panel');
-       const settingsToggle = document.getElementById('settings-toggle');
-       if (settingsPanel && settingsToggle) {
-         settingsPanel.classList.add('hidden');
-         settingsToggle.textContent = '⚙️ More';
-       }
+      // Hide settings panel
+      const settingsPanel = document.getElementById('settings-panel');
+      const settingsToggle = document.getElementById('settings-toggle');
+      if (settingsPanel && settingsToggle) {
+        settingsPanel.classList.add('hidden');
+        settingsToggle.textContent = '⚙️ More';
+      }
 
-       // Clear project selection
-       const projectButtons = document.querySelectorAll('.project-btn');
-       const clearProjectBtn = document.getElementById('clear-project-btn');
-       projectButtons.forEach(btn => {
-         btn.classList.remove('bg-blue-500', 'dark:bg-blue-600', 'text-white', 'border-blue-500', 'dark:border-blue-600');
-         btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400', 'border-transparent');
-       });
-       clearProjectBtn?.classList.add('hidden');
+      // Clear project selection
+      const projectButtons = document.querySelectorAll('.project-btn');
+      const clearProjectBtn = document.getElementById('clear-project-btn');
+      projectButtons.forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'dark:bg-blue-600', 'text-white', 'border-blue-500', 'dark:border-blue-600');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400', 'border-transparent');
+      });
+      clearProjectBtn?.classList.add('hidden');
       
          } catch (error) {
        console.error('Push failed:', error);
