@@ -3,17 +3,13 @@ title: "Booking.com Wrapped"
 description: "Personal travel analytics dashboard showcasing booking history and travel patterns across countries and time."
 date: "06/01/2025"
 demoURL: "https://v0-booking-com-dashboard-app.vercel.app/"
-ideaToDeploy: 4
-commits: 52
+ideaToDeploy: 1
+commits: 12
 tools: ["v0", "Vercel", "Next.js"]
 models: ["gpt-4o", "claude-3.5-sonnet"]
 screenshot: "/booking.png"
 summary: |
-  After years of using Booking.com for travel reservations, I wanted to visualize my travel patterns and spending habits.
-  
-  This dashboard transforms raw booking data into beautiful insights about destinations, spending trends, and travel memories.
-  
-  Built with modern data visualization to make personal travel data engaging and shareable.
+  TBD
 ---
 
 A personal travel analytics dashboard that transforms Booking.com booking history into beautiful, shareable insights about travel patterns, spending habits, and destination preferences over time.
