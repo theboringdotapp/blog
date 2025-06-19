@@ -1,7 +1,7 @@
 ---
 title: "Newsletter Builder"
 description: "AI-powered newsletter creation tool that streamlines link curation and content generation for weekly newsletters."
-date: "2025-07-19"
+date: "2025-06-19"
 demoURL: "https://nb.theboring.app"
 repoURL: "https://github.com/theboringdotapp/newsletter-builder"
 ideaToDeploy: 7
