@@ -13,6 +13,57 @@ globs: *
 - Claude-3.5-Sonnet
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
+- Newsletter Builder Project:
+    - URL: nb.theboring.app
+    - GitHub: @https://github.com/theboringdotapp/newsletter-builder
+    - Screenshot: nb.png
+    - Developed in 7 days, with 19 commits
+    - Live as of 2025-07-19
+    - Description: A streamlined AI-powered newsletter builder that helps you create weekly newsletters by saving interesting links throughout the week and using AI to generate cohesive content.
+    - Core Features:
+        - Save Links: Save interesting links (AI tools, models, articles) securely in a GitHub repository.
+        - Generate Newsletter: Review saved links, sort them, and let AI create a newsletter. Edit the content directly in the preview.
+        - Auto-Summary: AI automatically creates concise summaries of saved links using OpenAI.
+        - Kit.com Integration: Automatically create newsletter drafts directly in Kit.com.
+        - Export Options: Download as JSON or copy to clipboard.
+        - Archive Links: Archive used links after exporting.
+    - Quick Start:
+        - Clone and Install:
+          ```bash
+          git clone <your-repo-url>
+          cd newsletter-builder
+          npm install
+          ```
+        - Setup Configuration: Configure GitHub, OpenAI, and Kit.com (optional) API keys in the app's settings page.
+          ```bash
+          npm run dev
+          ```
+        - Set Up Storage Repository: Create a new repository on GitHub and generate a Personal Access Token with `repo` permissions.
+        - Get API Keys: Obtain OpenAI and Kit.com (optional) API keys.
+    - How to Use:
+        - Save Links: Save links with categories (Tool/Model/Article/Other). AI can generate titles and summaries.
+        - Generate Newsletter: Select saved links, reorder them, add personal thoughts, and generate the newsletter. Edit the preview directly.
+        - Export and Archive: Export to Kit.com, download JSON, or copy to clipboard. Archive used links.
+    - File Structure:
+        ```
+        your-newsletter-data-repo/
+        ├── links/
+        │   └── 2025/
+        │       └── 01/           # Month-based organization
+        │           └── links.json
+        ├── links/archive/
+        │   └── 2025/
+        │       └── 01/           # Archived links after newsletter export
+        │           └── archived-links.json
+        └── newsletters/
+            └── 2025-W03/         # Week-based organization
+                └── newsletter.json
+        ```
+    - Newsletter Template:
+        - AI Tools Worth Checking Out
+        - New AI Models to Explore
+        - Interesting Reads
+        - Weekly Learnings & Insights
 
 ## CODING STANDARDS
 
