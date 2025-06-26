@@ -4,6 +4,19 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Font loading optimization */
+@font-face {
+  font-family: "Geist Sans";
+  font-display: swap;
+  src: local("Geist Sans");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-display: swap;
+  src: local("Geist Mono");
+}
+
 @theme {
   --font-sans:
     Geist Sans, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
@@ -71,7 +84,25 @@
     @apply flex flex-col;
     @apply bg-white dark:bg-slate-900;
     @apply text-brand-700 dark:text-brand-200;
-    @apply transition-colors duration-500 ease-in-out;
+    @apply transition-colors duration-300 ease-in-out;
+    /* Better font stack with optimized fallbacks */
+    font-family:
+      "Geist Sans",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  /* Ensure smooth font loading */
+  body:not(.fonts-loaded) {
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
   }
 
   header {

@@ -70,6 +70,7 @@ globs: *
 ## WORKFLOW & RELEASE RULES
 
 ## DEBUGGING
+- **CSS Loading Optimization:** Ensure that the page is rendered only after the styles are fully loaded to prevent a "blinking" effect on new devices. Investigate strategies to prevent unstyled content from being displayed initially.
 
 ## REFERENCES
 

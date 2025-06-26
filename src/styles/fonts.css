@@ -1,0 +1,63 @@
+/* Optimized font loading - Critical weights only */
+@import "@fontsource/geist-sans/400.css";
+@import "@fontsource/geist-sans/500.css";
+@import "@fontsource/geist-sans/600.css";
+@import "@fontsource/geist-mono/400.css";
+@import "@fontsource/geist-mono/500.css";
+
+/* Override font-display for better loading performance */
+@font-face {
+  font-family: "Geist Sans";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  src: local("Geist Sans Regular"), local("GeistSans-Regular");
+}
+
+@font-face {
+  font-family: "Geist Sans";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+  src: local("Geist Sans Medium"), local("GeistSans-Medium");
+}
+
+@font-face {
+  font-family: "Geist Sans";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+  src: local("Geist Sans SemiBold"), local("GeistSans-SemiBold");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  src: local("Geist Mono Regular"), local("GeistMono-Regular");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+  src: local("Geist Mono Medium"), local("GeistMono-Medium");
+}
+
+/* Fallback fonts for better FOUC prevention */
+.font-sans-fallback {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+.font-mono-fallback {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+}

@@ -1,26 +1,8 @@
 ---
+import "../styles/fonts.css";
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import Analytics from '@vercel/analytics/astro';
-
-import "@fontsource/geist-sans/100.css";
-import "@fontsource/geist-sans/200.css";
-import "@fontsource/geist-sans/300.css";
-import "@fontsource/geist-sans/400.css";
-import "@fontsource/geist-sans/500.css";
-import "@fontsource/geist-sans/600.css";
-import "@fontsource/geist-sans/700.css";
-import "@fontsource/geist-sans/800.css";
-import "@fontsource/geist-sans/900.css";
-import "@fontsource/geist-mono/100.css";
-import "@fontsource/geist-mono/200.css";
-import "@fontsource/geist-mono/300.css";
-import "@fontsource/geist-mono/400.css";
-import "@fontsource/geist-mono/500.css";
-import "@fontsource/geist-mono/600.css";
-import "@fontsource/geist-mono/700.css";
-import "@fontsource/geist-mono/800.css";
-import "@fontsource/geist-mono/900.css";
 
 interface Props {
   title: string;
@@ -36,6 +18,37 @@ const { title, description, image = "/og.png" } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Critical CSS to prevent FOUC -->
+<style>
+  /* Prevent layout shift during font loading */
+  html {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: white;
+    color: #334155;
+  }
+  
+  html.dark {
+    background-color: #0f172a;
+    color: #f1f5f9;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  /* Smooth transition to web fonts */
+  body.fonts-loaded {
+    font-family: 'Geist Sans', system-ui, -apple-system, sans-serif;
+  }
+</style>
+
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link
   rel="icon"
@@ -86,6 +99,25 @@ const { title, description, image = "/og.png" } = Astro.props;
     animate();
     updateThemeButtons();
     addCopyCodeButtons();
+    
+    // Mark fonts as loaded when they're ready
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        document.body.classList.add('fonts-loaded');
+      });
+    } else {
+      // Fallback for browsers without font loading API
+      setTimeout(() => {
+        document.body.classList.add('fonts-loaded');
+      }, 100);
+    }
+
+    // Lazy load additional font weights after page load
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(loadAdditionalFonts);
+    } else {
+      setTimeout(loadAdditionalFonts, 1000);
+    }
 
     const backToTop = document.getElementById("back-to-top");
     backToTop?.addEventListener("click", (event) => scrollToTop(event));
@@ -123,6 +155,28 @@ const { title, description, image = "/og.png" } = Astro.props;
       });
 
     document.addEventListener("scroll", onScroll);
+  }
+
+  function loadAdditionalFonts() {
+    const additionalFonts = [
+      '@fontsource/geist-sans/100.css',
+      '@fontsource/geist-sans/200.css', 
+      '@fontsource/geist-sans/300.css',
+      '@fontsource/geist-sans/700.css',
+      '@fontsource/geist-sans/800.css',
+      '@fontsource/geist-sans/900.css',
+      '@fontsource/geist-mono/100.css',
+      '@fontsource/geist-mono/200.css',
+      '@fontsource/geist-mono/300.css',
+      '@fontsource/geist-mono/600.css',
+      '@fontsource/geist-mono/700.css',
+      '@fontsource/geist-mono/800.css',
+      '@fontsource/geist-mono/900.css'
+    ];
+
+    additionalFonts.forEach(font => {
+      import(font);
+    });
   }
 
   function updateThemeButtons() {
@@ -254,8 +308,6 @@ const { title, description, image = "/og.png" } = Astro.props;
       });
     }
   }
-
-
 
   document.addEventListener("DOMContentLoaded", () => init());
   document.addEventListener("astro:after-swap", () => init());
