@@ -11,6 +11,13 @@ globs: *
 - Next.js
 - GPT-4o
 - Claude-3.5-Sonnet
+- Cursor
+- SvelteKit 2.16+ + TypeScript + Tailwind CSS 3.4.17
+- IndexedDB with Dexie.js
+- Lucide Svelte
+- Chart.js
+- PapaParse
+- Zod
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
 - Newsletter Builder Project:
@@ -64,6 +71,280 @@ globs: *
         - New AI Models to Explore
         - Interesting Reads
         - Weekly Learnings & Insights
+- Money - Personal Finance Tracker:
+    - URL: @https://money.theboring.app
+    - GitHub: @https://github.com/theboringdotapp/money
+    - Date: 2025-06-27
+    - IdeaToDeploy: 4 days
+    - Commits: 58
+    - Tools: ["Cursor", "Vercel"]
+    - Models: ["claude-4-sonnet"]
+    - Screenshot: "/money.png"
+    - Description: A complete solution for managing your personal finances with automated CSV processing, intelligent categorization, and modern design. All data is processed and stored locally in your browser for maximum privacy and security.
+    - Core Features:
+        - Privacy-First: All data processing and storage happens locally in your browser using IndexedDB
+        - CSV Import: Drag-and-drop CSV file processing with duplicate detection
+        - Multi-Bank Support: Support for Nubank and Inter
+        - Smart Categorization: Automatic transaction categorization
+        - Mobile-Optimized: Apple-inspired design with liquid glass effects and touch-friendly interface
+        - Internationalization: Full i18n support with English and Portuguese (Brasil) translations
+        - Visual Analytics: Interactive charts and metrics for financial insights
+        - Auto-Learning: System learns from manual categorizations to improve accuracy
+    - Tech Stack:
+        - Frontend: SvelteKit 2.16+ + TypeScript + Tailwind CSS 3.4.17
+        - Database: IndexedDB with Dexie.js for client-side storage
+        - Icons: Lucide Svelte
+        - Charts: Chart.js for financial visualizations
+        - CSV Processing: PapaParse for robust file parsing
+        - Validation: Zod for type-safe data validation
+        - Styling: Tailwind CSS with custom glass morphism utilities
+        - i18n: Custom internationalization system with browser language detection
+        - Deploy: Vercel with static adapter for optimal performance
+    - Architecture:
+        - Client-Side Data Storage
+            - The application uses a fully client-side architecture with IndexedDB for data persistence:
+            ```
+            Browser Storage (IndexedDB)
+            ├── BankAccounts        # Bank account information
+            ├── Categories          # Expense/income categories with colors and icons
+            ├── Transactions        # All financial transactions
+            ├── RecurringPatterns   # Recurring payment detection
+            ├── FileUploads         # Upload history tracking
+            └── UserSettings        # User preferences and configuration
+            ```
+            - Key Benefits:
+                - Complete Privacy: No data leaves your device
+                - Fast Performance: No network latency for data operations
+                - Offline Support: Works completely offline after initial load
+                - Export/Import: Built-in backup and restore functionality
+    - Project Structure:
+        ```
+        src/
+        ├── lib/
+        │   ├── db/
+        │   │   ├── client.ts           # Dexie database configuration
+        │   │   └── index.ts            # Legacy Prisma exports (for compatibility)
+        │   ├── features/               # Feature-based architecture
+        │   │   ├── dashboard/          # Main dashboard with metrics
+        │   │   │   └── components/     # MetricsCard, CategoryChart, etc.
+        │   ├── transactions/       # Transaction management
+        │   │   │   ├── components/     # TransactionsTable
+        │   │   │   └── state/          # Transaction stores
+        │   ├── upload/             # File upload functionality
+        │   │   └── components/     # CSV upload components
+        │   └── uploads/            # Upload history
+        │       └── components/     # UploadHistory component
+        │   ├── components/
+        │   │   ├── ui/                 # Reusable UI components
+        │   │   │   ├── Button.svelte
+        │   │   │   ├── Card.svelte
+        │   │   │   ├── CategoryFilter.svelte
+        │   │   │   └── Toast.svelte
+        │   │   ├── OnboardingModal.svelte
+        │   │   └── UploadModal.svelte
+        │   ├── i18n/
+        │   │   └── translations.json   # English and Portuguese translations
+        │   ├── services/               # Business logic services
+        │   │   ├── autoCategorizationService.ts
+        │   │   ├── categories.ts
+        │   │   └── transactions.ts
+        │   ├── stores/                 # Svelte stores for state management
+        │   │   ├── categoryFilterStore.ts
+        │   │   ├── i18nStore.ts
+        │   │   └── toastStore.ts
+        │   └── utils/
+        │       ├── csv-processor.ts    # CSV parsing logic
+        │       └── index.ts            # Utility functions
+        ├── routes/
+        │   ├── +layout.svelte         # Main layout with navigation
+        │   ├── +page.svelte           # Dashboard (Balance) page
+        │   ├── credit-cards/          # Credit card analysis
+        │   ├── sources/               # Data sources management
+        │   └── settings/              # User settings and configuration
+        └── static/                    # Static assets
+        ```
+    - Installation & Setup
+        ```bash
+        git clone <your-repository>
+        cd money
+        npm install
+        ```
+        ```bash
+        # Start development server
+        npm run dev
+
+        # The app will be available at http://localhost:5173
+        ```
+        ```bash
+        # Build for production
+        npm run build
+
+        # Preview production build
+        npm run preview
+        ```
+    - How to Use
+        - Upload Your Financial Data
+            1. Navigate to Dashboard: Click "Add Statement" or go to Sources page
+            2. Drag & Drop CSV Files: Support for multiple files from different banks
+            3. Automatic Processing: Files are processed instantly with duplicate detection
+            4. Smart Categorization: Transactions are automatically categorized
+        - Supported Bank CSV Formats
+            ```csv
+            date,description,amount
+            2024-01-15,Restaurant purchase,-25.90
+            2024-01-16,PIX received,1500.00
+            ```
+            ```csv
+            Data,Descrição,Valor
+            15/01/2024,Card purchase,-25.90
+            16/01/2024,Deposit,1500.00
+            ```
+            ```csv
+            Data Mov.,Histórico,Valor
+            15/01/2024,Debit payment,-25.90
+            16/01/2024,Transfer,1500.00
+            ```
+            ```csv
+            Data,Descrição,Valor
+            15/01/2024,Debit purchase,-25.90
+            16/01/2024,TED received,1500.00
+            ```
+            ```csv
+            Data,Lançamento,Categoria,Tipo,Valor
+            02/06/2024,TC SUPERMARKET ITACARE BRA,SUPERMARKET,Cash purchase,R$ 42,83
+            02/06/2024,Adeilzalimasantos ITACARE BRA,SERVICES,Cash purchase,R$ 18,00
+            ```
+        - Smart Features
+            - Auto-Categorization System
+                - The system automatically categorizes transactions based on:
+                    - Keyword Matching: Predefined keywords for common categories
+                    - Learning Algorithm: Learns from your manual categorizations
+                    - Pattern Recognition: Identifies recurring transactions
+            - Category Filtering
+                - Multi-Category Filter: Hide/show multiple categories at once
+                - Persistent Preferences: Filter settings saved across sessions
+                - Global Application: Filters apply to all charts and tables
+            - Machine Learning
+                - Auto-Learning: When you manually categorize a transaction, the system learns for future similar transactions
+                - Bulk Updates: Option to update all similar existing transactions
+                - Keyword Management: View and manage learned keywords in settings
+    - Internationalization (i18n)
+        - Supported Languages
+            - English (default)
+            - Portuguese (Brasil)
+        - Language Detection
+            - Automatically detects browser language
+            - Defaults to English for unsupported languages
+            - Language preference persists across sessions
+        - Usage in Components
+            ```svelte
+            <script lang="ts">
+            import { currentTranslations, createTranslationFunction } from '$lib/stores/i18nStore.js';
+
+            $: t = createTranslationFunction($currentTranslations);
+            </script>
+
+            <h1>{t('dashboard.title')}</h1>
+            <p>{t('dashboard.subtitle', { month: displayMonth })}</p>
+            ```
+        - Adding New Languages
+            1. Add translations to `src/lib/i18n/translations.json`
+            2. Update the `Language` type in `src/lib/stores/i18nStore.ts`
+            3. Add language option to settings page
+    - Mobile Design
+        - Apple-Inspired Interface
+            - Liquid Glass Navigation: Bottom tab bar with glass morphism effects
+            - Touch-Optimized: 44px minimum touch targets following Apple HIG
+            - Responsive Design: Mobile-first approach with adaptive layouts
+            - Smooth Animations: Apple-style easing curves and micro-interactions
+        - Mobile Features
+            - Gesture-Friendly: Optimized scrolling and touch interactions
+            - Adaptive Cards: Stack vertically on mobile, side-by-side on desktop
+            - Mobile Chart Interactions: Touch-friendly chart navigation
+            - Responsive Typography: Scales appropriately across device sizes
+    - Configuration
+        - Settings Page Features
+            - Personal Preferences: Name filtering, investment category customization
+            - Skip Patterns: Configure transactions to automatically skip
+            - Category Keywords: Manage automatic categorization rules
+            - Learning Options: Control auto-learning behavior
+            - Language Selection: Switch between supported languages
+        - Data Management
+            - Export Database: Download complete database backup
+            - Import Database: Restore from backup file
+            - Clear Data: Reset all data (development/testing)
+    - Data Privacy & Security
+        - Privacy-First Approach
+            - No Server Storage: All data remains in your browser
+            - No Third-Party Tracking: No analytics or external data sharing
+            - Local Processing: All CSV processing happens client-side
+            - Encrypted Storage: IndexedDB provides secure local storage
+        - Backup & Restore
+            - Manual Export: Download complete database as encrypted file
+            - Import Capability: Restore from backup files
+            - Version Control: Built-in database versioning with Dexie
+    - Deployment
+        - Vercel Deployment
+            - The application is optimized for Vercel deployment with static adapter:
+            ```bash
+            # Install Vercel CLI
+            npm i -g vercel
+
+            # Deploy
+            vercel
+
+            # Or connect your GitHub repository for automatic deployments
+            ```
+        - Environment Variables
+            - No environment variables required - the app runs entirely client-side.
+        - Static Hosting
+            - Can be deployed to any static hosting provider:
+                - Vercel ✅
+                - Netlify ✅
+                - GitHub Pages ✅
+                - Cloudflare Pages ✅
+    - Development
+        - Available Scripts
+            ```bash
+            npm run dev          # Start development server
+            npm run build        # Build for production
+            npm run preview      # Preview production build
+            npm run check        # Type checking
+            npm run lint         # Lint code
+            npm run format       # Format code
+            npm run test         # Run tests
+            ```
+        - Database Operations
+            ```javascript
+            import { db, initializeDatabase, exportDatabase, importDatabase } from '$lib/db/client';
+
+            // Initialize with default data
+            await initializeDatabase();
+
+            // Export for backup
+            const backup = await exportDatabase();
+
+            // Import from backup
+            await importDatabase(backupBlob);
+            ```
+    - Contributing
+        1. Fork the project
+        2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+        3. Commit your changes (`git commit -am 'Add amazing feature'`)
+        4. Push to the branch (`git push origin feature/amazing-feature`)
+        5. Open a Pull Request
+        - Development Guidelines
+            - Follow TypeScript best practices
+            - Use Svelte 5 syntax and conventions
+            - Maintain responsive design principles
+            - Ensure i18n support for new features
+            - Test across different screen sizes
+    - Support
+        - If you encounter issues or have questions:
+            1. Check browser compatibility (modern browsers with IndexedDB support required)
+            2. Verify CSV file format matches supported bank formats
+            3. Check browser console for detailed error messages
+            4. Open an issue on GitHub with reproduction steps
 
 ## CODING STANDARDS
 
