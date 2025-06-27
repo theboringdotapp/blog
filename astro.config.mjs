@@ -11,6 +11,9 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  build: {
+    inlineStylesheets: "always",
+  },
   markdown: {
     shikiConfig: {
       theme: "css-variables",
