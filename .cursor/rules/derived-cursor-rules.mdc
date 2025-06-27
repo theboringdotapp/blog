@@ -133,7 +133,7 @@ globs: *
         │   ├── upload/             # File upload functionality
         │   │   └── components/     # CSV upload components
         │   └── uploads/            # Upload history
-        │       └── components/     # UploadHistory component
+        │   │       └── components/     # UploadHistory component
         │   ├── components/
         │   │   ├── ui/                 # Reusable UI components
         │   │   │   ├── Button.svelte

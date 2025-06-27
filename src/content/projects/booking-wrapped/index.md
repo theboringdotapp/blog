@@ -2,7 +2,7 @@
 title: "Booking.com Wrapped"
 description: "Personal travel analytics dashboard showcasing booking history and travel patterns across countries and time."
 date: "06/01/2025"
-demoURL: "https://v0-booking-com-dashboard-app.vercel.app/"
+demoURL: "https://booking.theboring.app/"
 ideaToDeploy: 1
 commits: 12
 tools: ["v0", "Vercel", "Next.js"]
