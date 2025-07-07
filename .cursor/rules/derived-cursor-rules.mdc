@@ -18,6 +18,12 @@ globs: *
 - Chart.js
 - PapaParse
 - Zod
+- Astro 5+
+- TailwindCSS v4
+- astro-pagefind
+- @tailwindcss/vite plugin
+- @tailwindcss/typography
+- @fontsource packages
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
 - Newsletter Builder Project:
@@ -392,3 +398,9 @@ globs: *
 ## REFERENCES
 
 ## BEST PRACTICES
+- When adding a new project entry, create a new directory under `src/content/projects/` with an `index.md` file.
+- The frontmatter should include: `title`, `description`, `date`, `demoURL`, `repoURL`, `ideaToDeploy`, `commits`, `tools`, `models`, and `screenshot`.
+- Follow the established content structure: brief introduction paragraph, ## Features, ## Architecture, ## Technical Implementation, and a closing paragraph.
+- The `date` field in the frontmatter can be optional to hide the date if the project is not yet released.
+- When linking to a project details page, add a `?from=timeline` or `?from=projects` query parameter to allow the back button to navigate back to the correct page.
+- When sorting projects by date, items without dates should be treated as if they have future dates, and will appear first in all sorted lists (newest first).
