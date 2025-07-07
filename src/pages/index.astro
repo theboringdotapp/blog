@@ -212,8 +212,10 @@ Each one is a joy, not a startup.
                           transition-all duration-300 ease-out">
                 <div class="status-dot size-2 rounded-full bg-amber-500 mt-2.5 pulse-glow"></div>
                 <div class="flex-1 space-y-1">
-                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Current Technical Challenge</p>
-                  <p class="text-base font-medium text-slate-900 dark:text-slate-100">Experimenting with Linear + Parallel Agents</p>
+                  <p class="text-sm font-medium text-slate-600 dark:text-slate-400">This month's challenge</p>
+                  <p class="text-base font-medium text-slate-900 dark:text-slate-100">Learning how to charge for products that cost money to run.
+
+                  </p>
                 </div>
               </div>
               
@@ -277,10 +279,10 @@ Each one is a joy, not a startup.
         <section class="animate space-y-8 fade-in-up">
           <div class="space-y-2">
             <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-              Latest apps
+              Latest tools
             </h2>
             <p class="text-slate-600 dark:text-slate-400">
-              These apps solve problems I had, maybe it can help you too.
+              These tools solve problems I had, maybe it can help you too.
             </p>
           </div>
           <ul class="not-prose flex flex-col gap-6">
@@ -305,7 +307,7 @@ Each one is a joy, not a startup.
                          hover:shadow-lg hover:shadow-purple-200/30 dark:hover:shadow-purple-900/30
                          transition-all duration-300 ease-out
                          backdrop-blur-sm transform-gpu hover:scale-105">
-                See all apps
+                See all tools
                 <svg class="size-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -316,7 +318,7 @@ Each one is a joy, not a startup.
 
         <!-- Recent Insights Section -->
         {insightEntries.length > 0 && (
-          <section class="animate space-y-8 fade-in-up">
+          <section class="animate space-y-8">
             <div class="space-y-2">
               <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                 Recent thoughts
@@ -333,9 +335,7 @@ Each one is a joy, not a startup.
                                   <div style={`animation-delay: ${(index + 1) * 150}ms`} 
                      class={index === insightEntries.length - 1 ? "relative" : ""}>
                   <InsightDisplay insight={insight} showProjectChip={true} from="homepage" />
-                    {index === insightEntries.length - 1 && (
-                      <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white dark:from-slate-950 to-transparent pointer-events-none"></div>
-                    )}
+                 
                   </div>
                 ))}
               </div>
@@ -469,28 +469,71 @@ Each one is a joy, not a startup.
 </Layout>
 
 <script>
-  // Trigger animations when elements come into view
-  const animateElements = document.querySelectorAll('.animate, .tech-card, .focus-item, .project-card-wrapper, .blog-card-wrapper, .insight-wrapper, .social-button');
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('show');
-      }
+  // Initialize page functionality
+  function initializePage() {
+    // Trigger animations when elements come into view
+    const animateElements = document.querySelectorAll('.animate, .tech-card, .focus-item, .project-card-wrapper, .blog-card-wrapper, .insight-wrapper, .social-button');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
     });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  });
-  
-  animateElements.forEach(el => {
-    observer.observe(el);
-  });
-  
-  // Clean up on page navigation
-  document.addEventListener('astro:before-swap', () => {
+    
     animateElements.forEach(el => {
-      observer.unobserve(el);
+      observer.observe(el);
     });
+    
+    // Clean up on page navigation
+    document.addEventListener('astro:before-swap', () => {
+      animateElements.forEach(el => {
+        observer.unobserve(el);
+      });
+    });
+  }
+
+  // ConvertKit form reinitialization
+  function initializeConvertKit() {
+    const formContainer = document.querySelector('.convertkit-form');
+    if (!formContainer) return;
+
+    // Check if there's already a form inside the container
+    const existingForm = formContainer.querySelector('form');
+    if (existingForm) {
+      // Form already exists, no need to reinitialize
+      return;
+    }
+
+    // If no form exists, we need to reload the ConvertKit script
+    const existingScript = formContainer.querySelector('script[data-uid="0588ec5fc4"]');
+    if (existingScript) {
+      // Create a new script element
+      const newScript = document.createElement('script');
+      newScript.src = 'https://theboringapp.kit.com/0588ec5fc4/index.js';
+      newScript.setAttribute('data-uid', '0588ec5fc4');
+      newScript.async = true;
+      
+      // Replace the old script with the new one
+      existingScript.remove();
+      formContainer.appendChild(newScript);
+    }
+  }
+
+  // Run on initial load
+  document.addEventListener('DOMContentLoaded', () => {
+    initializePage();
+    initializeConvertKit();
+  });
+  
+  // Run on Astro page navigation (this is crucial for the newsletter form!)
+  document.addEventListener('astro:page-load', () => {
+    initializePage();
+    // Add a small delay to ensure the DOM is fully updated
+    setTimeout(initializeConvertKit, 100);
   });
 </script>
