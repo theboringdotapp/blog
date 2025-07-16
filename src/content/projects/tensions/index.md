@@ -1,6 +1,7 @@
 ---
 title: "Tensions"
 description: "A thoughtful space for capturing, understanding, and dissolving mental tensions through gentle reflection and AI-powered insights."
+date: "07/16/2025"
 demoURL: "https://tensions.theboring.app/"
 repoURL: "https://github.com/theboringdotapp/tensions"
 ideaToDeploy: 3
