@@ -160,7 +160,7 @@ globs: *
         │   │   └── toastStore.ts
         │   └── utils/
         │       ├── csv-processor.ts    # CSV parsing logic
-        │       └── index.ts            # Utility functions
+        │   └── index.ts            # Utility functions
         ├── routes/
         │   ├── +layout.svelte         # Main layout with navigation
         │   ├── +page.svelte           # Dashboard (Balance) page
@@ -351,6 +351,15 @@ globs: *
             2. Verify CSV file format matches supported bank formats
             3. Check browser console for detailed error messages
             4. Open an issue on GitHub with reproduction steps
+- Tensions:
+    - URL: tensions.theboring.app
+    - GitHub: @https://github.com/theboringdotapp/tensions
+    - IdeaToDeploy: 3
+    - Commits: 23
+    - Tools: v0, Cursor
+    - Models: v0, claude-4-sonnet
+    - Screenshot: "/tensions.png"
+    - Description: "I noticed I have a few themes that constantly pop into my mind. I call them tensions. Some are good, like flirting with a specific person. Some are bad, like thinking about the future. I want to capture them, expand on them and dissolve them over time. I hope this tool will do just that."
 
 ## CODING STANDARDS
 
@@ -399,7 +408,7 @@ globs: *
 
 ## BEST PRACTICES
 - When adding a new project entry, create a new directory under `src/content/projects/` with an `index.md` file.
-- The frontmatter should include: `title`, `description`, `date`, `demoURL`, `repoURL`, `ideaToDeploy`, `commits`, `tools`, `models`, and `screenshot`.
+- The frontmatter should include: `title`, `description`, `date`, `demoURL`, `repoURL`, `ideaToDeploy`, `commits`, `tools`, `models`, and `screenshot`, and `summary`.
 - Follow the established content structure: brief introduction paragraph, ## Features, ## Architecture, ## Technical Implementation, and a closing paragraph.
 - The `date` field in the frontmatter can be optional to hide the date if the project is not yet released.
 - When linking to a project details page, add a `?from=timeline` or `?from=projects` query parameter to allow the back button to navigate back to the correct page.
